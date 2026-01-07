@@ -1,6 +1,6 @@
 # Architecture Review System
 
-> AWS 기반 AI 아키텍처 검토 시스템 - QuickSight Chat Agent와 Bedrock AgentCore를 활용한 자동화된 문서 검토
+> Amazon Quick Suite Chat Agent를 이용한 아키텍처 검토 시스템 - Quick Suite Chat Agent와 Bedrock AgentCore Gateway를 활용한 자동화된 아키텍처 문서 검토
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AWS](https://img.shields.io/badge/AWS-Cloud-orange.svg)](https://aws.amazon.com/)
@@ -10,16 +10,17 @@
 
 ## 📖 소개
 
-Architecture Review System은 AWS 서버리스 아키텍처를 기반으로 구축된 AI 기반 문서 검토 시스템입니다. QuickSight Chat Agent와 Bedrock AgentCore Gateway를 통합하여 아키텍처 문서의 자동화된 검토 프로세스를 제공합니다.
+이 Architecture Review System은 Agentic AI 기반의 Amazon Quick Suite의 Space, MCP Action, Knowledge base를 이용한 Agentic AI 기반 아키텍처 검토 시스템입니다. Quick Suite Chat Agent와 Space, Bedrock AgentCore Gateway, Lambda Target(MCP)을 통합하여 아키텍처 문서의 자동화된 검토 프로세스를 제공합니다.
 
 ### ✨ 주요 기능
 
-- 📄 **문서 관리**: PDF, 이미지 파일 업로드 및 관리 (최대 50MB)
-- 🤖 **AI 기반 검토**: QuickSight Chat Agent를 통한 대화형 문서 검토
-- 🔗 **MCP 통합**: Model Context Protocol을 통한 확장 가능한 도구 연동
-- 🔐 **보안 인증**: AWS Cognito 기반 사용자 인증 및 세션 관리
-- 📊 **검토 결과 관리**: 마크다운 형식의 검토 결과 저장 및 시각화
-- 🎨 **직관적인 UI**: Material-UI 기반의 반응형 웹 인터페이스
+- 📄 **문서 관리**: PDF, 이미지 파일 업로드/프리뷰 및 관리 (최대 50MB)
+- 🤖 **Agentic AI 기반 아키텍처 검토**: Quick Suite Chat Agent를 통한 대화형 아키텍처 검토
+- � **Quick Suite Chat Agent Embedding**: 채팅 에이전트를 기업의 애플리케이션에 임베딩
+- 🔗 **MCP 통합**: Model Context Protocol을 통한 확장 가능한 도구 연동(아키텍처 검토 요청 문서 저장/조회/프리뷰, 아키텍처 검토 상태 변경/검토 결과 저장 등)
+- 🔐 **보안 인증**: AWS Cognito 기반 사용자 인증 및 AgentCore Gateway 인증
+- 📊 **검토 결과 관리**: 마크다운 형식의 검토 결과 저장 및 보기
+- 🎨 **직관적인 UI**: Material-UI 기반의 반응형 웹 인터페이스(프론트엔드)
 
 ### 🎬 데모
 
