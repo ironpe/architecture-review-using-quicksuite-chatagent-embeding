@@ -17,38 +17,45 @@
 
 ## 🚀 5분 시작하기
 
-### 1단계: 프로젝트 설정 (1분)
+> **참고**: 이 가이드는 제공된 스크립트를 사용하여 빠르게 시작하는 방법을 안내합니다.
+
+### 1단계: 리포지토리 클론 및 초기 설정 (1분)
 
 ```bash
-# 프로젝트 디렉토리로 이동
+# 리포지토리 클론
+git clone https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding.git
 cd architecture-review-using-quicksuite-chatagent-embeding
 
-# 의존성 설치
-npm install
-
-# 환경 변수 복사
-cp packages/frontend/.env.example packages/frontend/.env
-cp packages/backend/.env.example packages/backend/.env
+# 초기 설정 (의존성 설치 및 환경 변수 복사)
+./scripts/setup.sh
 ```
 
-### 2단계: AWS 리소스 배포 (2분)
+### 2단계: 환경 변수 업데이트 (1분)
+
+배포 전에 환경 변수를 수정합니다:
+
+**packages/backend/.env**
+```bash
+AWS_ACCOUNT_ID=YOUR_AWS_ACCOUNT_ID
+QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:YOUR_REGION:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID
+QUICKSIGHT_USER_NAME=YOUR_QUICKSUITE_USER
+```
+
+### 3단계: AWS 리소스 배포 (2-3분)
 
 ```bash
-# 백엔드 빌드
-cd packages/backend
-npm run build
-
-# 인프라 배포
-cd ../infrastructure
-npx cdk deploy --all --require-approval never
+# 백엔드 빌드 및 AWS 배포
+./scripts/deploy.sh
 ```
 
 배포 완료 후 출력되는 정보를 메모하세요:
 - API Gateway URL
 - Cognito User Pool ID
 - Cognito Client ID
+- S3 버킷 이름
+- DynamoDB 테이블 이름
 
-### 3단계: 환경 변수 업데이트 (30초)
+### 4단계: 프론트엔드 환경 변수 업데이트 (30초)
 
 `packages/frontend/.env` 파일을 열고 배포 결과로 업데이트:
 
@@ -58,7 +65,17 @@ VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
 VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-### 4단계: 사용자 생성 (30초)
+### 4단계: 프론트엔드 환경 변수 업데이트 (30초)
+
+`packages/frontend/.env` 파일을 열고 배포 결과로 업데이트:
+
+```bash
+VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod
+VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
+VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+### 5단계: Cognito 사용자 생성 (30초)
 
 ```bash
 # Cognito 사용자 생성
@@ -77,11 +94,11 @@ aws cognito-idp admin-set-user-password \
   --region us-east-1
 ```
 
-### 5단계: 프론트엔드 실행 (1분)
+### 6단계: 프론트엔드 실행 (30초)
 
 ```bash
-cd packages/frontend
-npm run dev
+# 프론트엔드 개발 서버 시작
+./scripts/local-dev.sh
 ```
 
 브라우저가 자동으로 http://localhost:5173 을 엽니다.
