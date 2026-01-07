@@ -65,16 +65,6 @@ VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
 VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-### 4단계: 프론트엔드 환경 변수 업데이트 (30초)
-
-`packages/frontend/.env` 파일을 열고 배포 결과로 업데이트:
-
-```bash
-VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod
-VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
-VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
 ### 5단계: Cognito 사용자 생성 (30초)
 
 ```bash
