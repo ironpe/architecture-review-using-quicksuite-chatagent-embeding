@@ -4,8 +4,6 @@ import {
   signOut, 
   getCurrentUser, 
   fetchAuthSession,
-  signInWithRedirect,
-  AuthUser,
 } from 'aws-amplify/auth';
 
 interface User {
@@ -19,7 +17,6 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
-  loginWithHostedUI: () => Promise<void>;
   logout: () => Promise<void>;
   getAccessToken: () => Promise<string | null>;
 }
@@ -84,17 +81,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const loginWithHostedUI = async () => {
-    try {
-      await signInWithRedirect({
-        provider: 'Cognito',
-      });
-    } catch (error: any) {
-      console.error('Hosted UI login error:', error);
-      throw new Error(error.message || 'Hosted UI 로그인에 실패했습니다');
-    }
-  };
-
   const logout = async () => {
     try {
       await signOut();
@@ -121,7 +107,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         isLoading,
         login,
-        loginWithHostedUI,
         logout,
         getAccessToken,
       }}

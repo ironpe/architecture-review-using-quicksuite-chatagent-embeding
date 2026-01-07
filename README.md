@@ -16,7 +16,7 @@
 
 - 📄 **문서 관리**: PDF, 이미지 파일 업로드/프리뷰 및 관리 (최대 50MB)
 - 🤖 **Agentic AI 기반 아키텍처 검토**: Quick Suite Chat Agent를 통한 대화형 아키텍처 검토
-- � **Quick Suite Chat Agent Embedding**: 채팅 에이전트를 기업의 애플리케이션에 임베딩
+- � **Quick Suite Chat Agent Embedding**: 채팅 에이전트를 기업의 애플리케이션에 임베딩하여 일관된 UI/UX 제공
 - 🔗 **MCP 통합**: Model Context Protocol을 통한 확장 가능한 도구 연동(아키텍처 검토 요청 문서 저장/조회/프리뷰, 아키텍처 검토 상태 변경/검토 결과 저장 등)
 - 🔐 **보안 인증**: AWS Cognito 기반 사용자 인증 및 AgentCore Gateway 인증
 - 📊 **검토 결과 관리**: 마크다운 형식의 검토 결과 저장 및 보기
@@ -93,8 +93,8 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 
 ### 설정 가이드
 - [Cognito 통합](docs/COGNITO_INTEGRATION.md) - 인증 설정
-- [QuickSight 설정](docs/QUICKSIGHT_SETUP.md) - Chat Agent 설정
-- [AgentCore MCP 설정](docs/AGENTCORE_MCP_SETUP.md) - MCP 도구 연동
+- [Quick Suite 설정](docs/QUICKSIGHT_SETUP.md) - Chat Agent 설정
+- [AgentCore Gateway+MCP 통합 설정](docs/AGENTCORE_MCP_SETUP.md) - MCP 도구 연동
 
 ### 참고 자료
 - [아키텍처](docs/ARCHITECTURE.md) - 시스템 아키텍처
@@ -128,7 +128,7 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 - **스토리지**: S3
 - **데이터베이스**: DynamoDB
 - **인증**: Cognito
-- **AI/BI**: QuickSight, Bedrock AgentCore
+- **AI/BI**: Quick Suite Chat Agent, Bedrock AgentCore
 
 ## 📦 프로젝트 구조
 

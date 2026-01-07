@@ -9,7 +9,6 @@ import UploadPage from './pages/UploadPage';
 import DocumentListPage from './pages/DocumentListPage';
 import PreviewPage from './pages/PreviewPage';
 import LoginPage from './pages/LoginPage';
-import CallbackPage from './pages/CallbackPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import './config/cognito'; // Initialize Amplify
 
@@ -118,7 +117,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<Navigate to="/upload" replace />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/callback" element={<CallbackPage />} />
                 <Route
                   path="/upload"
                   element={
