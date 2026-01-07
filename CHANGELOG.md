@@ -5,17 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Planned
-- API Gateway Cognito Authorizer 추가
-- 다이어그램 생성 기능 완성
-- 회원가입 및 비밀번호 재설정 기능
-- 문서 다운로드 기능
-- 검토 히스토리 기능
-- 알림 기능
-- 대시보드 개선
-
 ## [1.0.0] - 2025-01-07
 
 ### Added
@@ -24,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AWS Lambda 기반 백엔드 API
 - AWS CDK 인프라 코드
 - 문서 업로드 및 관리 기능
-- QuickSight Chat Agent 통합
+- Quick Suite Chat Agent 통합
 - Bedrock AgentCore Gateway 연동
 - MCP (Model Context Protocol) 서버
 - Cognito 기반 사용자 인증

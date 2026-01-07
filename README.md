@@ -143,8 +143,7 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 ├── docs/                  # 문서
 ├── scripts/               # 배포 및 유틸리티 스크립트
 ├── README.md
-├── LICENSE
-└── CONTRIBUTING.md
+└── LICENSE
 ```
 
 ## 🎯 주요 기능 상세
@@ -156,11 +155,11 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 - 파일명 기반 검색 기능
 - 브라우저 내 문서 미리보기
 
-### 2. AI 기반 검토
-- QuickSight Chat Agent 통합
-- 자연어 대화를 통한 문서 검토
-- MCP 프로토콜 기반 도구 연동
-- 검토 결과 자동 저장
+### 2. Agentic AI 기반 아키텍처 검토
+- Quick Suite Chat Agent 통합
+- 자연어 대화를 통한 아키텍처 검토
+- MCP 프로토콜 기반 도구 연동 : 검토 대상/결과 파일 저장, 검토 대상 조회, 검토 결과 상태 저장
+- 검토 결과 자동 저장 : DynamoDB
 
 ### 3. 검토 관리
 - 검토자, 아키텍처 개요 등 메타데이터 관리
@@ -174,22 +173,6 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 - S3 Pre-signed URL을 통한 안전한 파일 업로드
 - IAM 역할 기반 권한 관리
 
-## 🤝 기여하기
-
-기여를 환영합니다! 자세한 내용은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요.
-
-### 기여 방법
-
-1. 이 리포지토리를 Fork 합니다
-2. Feature 브랜치를 생성합니다 (`git checkout -b feature/AmazingFeature`)
-3. 변경 사항을 커밋합니다 (`git commit -m 'feat: Add some AmazingFeature'`)
-4. 브랜치에 Push 합니다 (`git push origin feature/AmazingFeature`)
-5. Pull Request를 생성합니다
-
-## 🐛 버그 리포트 및 기능 제안
-
-버그를 발견하거나 새로운 기능을 제안하고 싶으시다면 [GitHub Issues](https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding/issues)를 이용해주세요.
-
 ## � 라이선스
 
 이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참고하세요.
@@ -199,27 +182,22 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 이 프로젝트는 다음 AWS 서비스와 오픈소스 프로젝트를 활용합니다:
 
 - [AWS Lambda](https://aws.amazon.com/lambda/)
-- [Amazon QuickSight](https://aws.amazon.com/quicksight/)
+- [Amazon Quick Suite](https://aws.amazon.com/quicksuite/)
 - [Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/)
 - [AWS CDK](https://aws.amazon.com/cdk/)
 - [React](https://reactjs.org/)
 - [Material-UI](https://mui.com/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 
-## 📞 문의
-
-- **GitHub Issues**: [이슈 생성](https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding/issues)
-- **GitHub Discussions**: [토론 참여](https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding/discussions)
-
 ## 🔗 관련 링크
 
-- [AWS QuickSight Embedded Chat 블로그](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
+- [Amazon Quick Suite Embedded Chat Agent](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
+- [Quick Suite with MCP](https://aws.amazon.com/ko/blogs/machine-learning/connect-amazon-quick-suite-to-enterprise-apps-and-agents-with-mcp)
 - [QuickSight Embedding SDK](https://github.com/awslabs/amazon-quicksight-embedding-sdk)
-- [Bedrock AgentCore 문서](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)
+- [Bedrock AgentCore](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ---
 
-**Made with ❤️ using AWS Serverless Technologies**
 
 ⭐ 이 프로젝트가 도움이 되었다면 Star를 눌러주세요!
