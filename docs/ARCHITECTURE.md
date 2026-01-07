@@ -11,7 +11,7 @@ graph TB
     subgraph "프론트엔드 - React + Vite"
         Frontend[React Application<br/>localhost:5173]
         AuthContext[Auth Context<br/>Amplify]
-        ChatWidget[Chat Widget<br/>Quick Suite SDK]
+        ChatWidget[Chat Widget<br/>QuickSuite SDK]
     end
 
     subgraph "AWS 인증"
@@ -33,7 +33,7 @@ graph TB
         DeleteHandler[Delete<br/>Handler]
         ReviewHandler[Update Review<br/>Handler]
         GetReviewHandler[Get Review<br/>Handler]
-        QSHandler[Quick Suite<br/>Embed Handler]
+        QSHandler[QuickSuite<br/>Embed Handler]
         MCPHandler[MCP Server<br/>Handler]
     end
 
@@ -43,7 +43,7 @@ graph TB
     end
 
     subgraph "AWS AI/BI Services"
-        Quick Suite[Amazon Quick Suite<br/>Chat Agent]
+        QuickSuite[Amazon QuickSuite<br/>Chat Agent]
         AgentCore[Bedrock AgentCore<br/>Gateway]
     end
 
@@ -54,8 +54,8 @@ graph TB
     Frontend -->|Embed Request| ChatWidget
     
     ChatWidget -->|Get Embed URL| QSHandler
-    QSHandler -->|Generate URL| Quick Suite
-    ChatWidget -->|Chat Interface| Quick Suite
+    QSHandler -->|Generate URL| QuickSuite
+    ChatWidget -->|Chat Interface| QuickSuite
     
     APIGateway --> CORS
     APIGateway --> UploadHandler
@@ -79,7 +79,7 @@ graph TB
     ReviewHandler -->|Update| DynamoDB
     GetReviewHandler -->|Get| S3
     
-    Quick Suite -->|MCP Actions| AgentCore
+    QuickSuite -->|MCP Actions| AgentCore
     AgentCore -->|Cognito JWT| CognitoClient
     AgentCore -->|Invoke| MCPHandler
     MCPHandler -->|CRUD| DynamoDB
@@ -91,7 +91,7 @@ graph TB
     style APIGateway fill:#e6f3ff
     style S3 fill:#e6ffe6
     style DynamoDB fill:#e6ffe6
-    style Quick Suite fill:#f3e6ff
+    style QuickSuite fill:#f3e6ff
     style AgentCore fill:#f3e6ff
 ```
 
@@ -156,14 +156,14 @@ sequenceDiagram
     Frontend-->>User: 업로드 완료 메시지
 ```
 
-## 💬 Quick Suite Chat Agent 통합
+## 💬 QuickSuite Chat Agent 통합
 
 ```mermaid
 sequenceDiagram
     participant User as 👤 사용자
     participant ChatWidget as Chat Widget
-    participant QSLambda as Quick Suite Lambda
-    participant Quick Suite as Quick Suite Agent
+    participant QSLambda as QuickSuite Lambda
+    participant QuickSuite as QuickSuite Agent
     participant AgentCore as AgentCore Gateway
     participant Cognito as Cognito (MCP Client)
     participant MCPLambda as MCP Lambda
@@ -171,29 +171,29 @@ sequenceDiagram
 
     User->>ChatWidget: 채팅 버튼 클릭
     ChatWidget->>QSLambda: GET /quicksight/embed-url
-    QSLambda->>Quick Suite: GenerateEmbedUrlForRegisteredUser
-    Quick Suite-->>QSLambda: Embed URL
+    QSLambda->>QuickSuite: GenerateEmbedUrlForRegisteredUser
+    QuickSuite-->>QSLambda: Embed URL
     QSLambda-->>ChatWidget: {embedUrl}
     ChatWidget->>ChatWidget: embedQuickChat(url)
     ChatWidget-->>User: 채팅 창 표시
     
-    User->>Quick Suite: "문서 목록을 보여줘"
-    Quick Suite->>AgentCore: MCP Action: list_documents
+    User->>QuickSuite: "문서 목록을 보여줘"
+    QuickSuite->>AgentCore: MCP Action: list_documents
     AgentCore->>Cognito: Get OAuth Token
     Cognito-->>AgentCore: Access Token
     AgentCore->>MCPLambda: Invoke with token
     MCPLambda->>DynamoDB: Query documents
     DynamoDB-->>MCPLambda: Document list
     MCPLambda-->>AgentCore: MCP Response
-    AgentCore-->>Quick Suite: Action Result
-    Quick Suite-->>User: "다음 문서들이 있습니다..."
+    AgentCore-->>QuickSuite: Action Result
+    QuickSuite-->>User: "다음 문서들이 있습니다..."
 ```
 
 ## 🔧 MCP 도구 아키텍처
 
 ```mermaid
 graph LR
-    subgraph "Quick Suite Chat Agent"
+    subgraph "QuickSuite Chat Agent"
         Agent[Chat Agent<br/>ef4cec92...]
     end
 
@@ -310,7 +310,7 @@ graph TB
         end
 
         subgraph "AI/BI Services"
-            QS[Quick Suite<br/>Chat Agent]
+            QS[QuickSuite<br/>Chat Agent]
             AC[AgentCore<br/>Gateway]
         end
     end
@@ -397,7 +397,7 @@ graph LR
 - **인증**: AWS Amplify 6.0
 - **HTTP 클라이언트**: Axios 1.6
 - **마크다운**: react-markdown 10.1
-- **Quick Suite**: amazon-quicksight-embedding-sdk 2.11
+- **QuickSuite**: amazon-quicksight-embedding-sdk 2.11
 
 ### 백엔드
 - **런타임**: Node.js 18.x
@@ -417,7 +417,7 @@ graph LR
 - **스토리지**: S3
 - **데이터베이스**: DynamoDB
 - **인증**: Cognito
-- **AI/BI**: Quick Suite, Bedrock AgentCore
+- **AI/BI**: QuickSuite, Bedrock AgentCore
 - **모니터링**: CloudWatch (기본)
 
 ## 🔒 보안 아키텍처
