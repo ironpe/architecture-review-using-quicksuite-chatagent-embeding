@@ -90,8 +90,8 @@ npm run dev
 
 ### 로그인
 
-1. Username: `admin`
-2. Password: `Welcome123!` (또는 설정한 비밀번호)
+1. Username: `your-username`
+2. Password: `your-password`
 3. "로그인" 클릭
 
 ### 문서 업로드
@@ -109,21 +109,22 @@ npm run dev
 
 ## 🤖 Chat Agent 사용 (선택사항)
 
-Chat Agent를 사용하려면 QuickSight 설정이 필요합니다.
+Chat Agent를 사용하려면 QuickSuite 설정이 필요합니다.
 
-### QuickSight 빠른 설정
+### QuickSuite 빠른 설정
 
-1. AWS 콘솔에서 QuickSight 구독
+1. AWS 콘솔에서 QuickSuite 구독
 2. Chat Agent 생성
 3. AgentCore Gateway 설정
+4. Space 및 Knowledge Base 생성
 
-자세한 내용은 [QuickSight 설정 가이드](QUICKSIGHT_SETUP.md)를 참고하세요.
+자세한 내용은 [QuickSuite 설정 가이드](QUICKSIGHT_SETUP.md)를 참고하세요.
 
 ## 🎨 주요 기능 둘러보기
 
 ### 문서 관리
 - **업로드**: PDF, PNG, JPG, JPEG 지원 (최대 50MB)
-- **검색**: 파일명으로 문서 검색
+- **검색**: 파일명 또는 파일 ID로 문서 검색
 - **미리보기**: 브라우저에서 문서 확인
 - **삭제**: 불필요한 문서 삭제
 
@@ -132,7 +133,7 @@ Chat Agent를 사용하려면 QuickSight 설정이 필요합니다.
 - **검토 상태**: 검토 필요/완료 상태 관리
 - **검토 결과**: 마크다운 형식으로 결과 저장
 
-### Chat Agent (QuickSight 설정 후)
+### Chat Agent (QuickSuite 설정 후)
 - **문서 조회**: "문서 목록을 보여줘"
 - **검토 수행**: "문서 XXX의 검토를 시작해줘"
 - **결과 저장**: "검토 결과를 저장해줘"
@@ -177,7 +178,7 @@ aws cognito-idp admin-set-user-password \
 
 기본 기능을 확인했다면:
 
-1. **QuickSight 설정**: AI 기반 검토 기능 활성화
+1. **QuickSuite 설정**: AI 기반 검토 기능 활성화
 2. **보안 강화**: Cognito Authorizer 추가
 3. **커스터마이징**: UI 테마 변경, 추가 기능 개발
 
