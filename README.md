@@ -33,13 +33,13 @@ graph TB
     User[👤 사용자] --> Frontend[React Frontend]
     Frontend --> APIGateway[API Gateway]
     Frontend --> Cognito[Cognito Auth]
-    Frontend --> QuickSight[QuickSight Chat]
+    Frontend --> QuickSuite[QuickSuite Chat]
     
     APIGateway --> Lambda[Lambda Functions]
     Lambda --> S3[S3 Storage]
     Lambda --> DynamoDB[DynamoDB]
     
-    QuickSight --> AgentCore[AgentCore Gateway]
+    QuickSuite --> AgentCore[AgentCore Gateway]
     AgentCore --> MCPLambda[MCP Lambda]
     MCPLambda --> S3
     MCPLambda --> DynamoDB
@@ -55,8 +55,29 @@ graph TB
 - AWS CLI 2.x 이상
 - AWS CDK 2.x 이상
 - AWS 계정 (관리자 권한 권장)
+- QuickSuite Enterprise Edition 구독
 
-### 설치
+### 전체 설정 프로세스
+
+이 시스템을 완전히 설정하고 아키텍처 문서 리뷰를 수행하려면 다음 단계를 순서대로 진행하세요:
+
+#### 📖 1단계: 기본 설치 및 배포
+1. **[설치 가이드](docs/INSTALLATION.md)** - 사전 요구사항 및 환경 설정
+2. **[배포 가이드](docs/DEPLOYMENT.md)** - AWS 리소스 배포 (Lambda, API Gateway, DynamoDB, S3, Cognito)
+3. **[빠른 시작 가이드](docs/QUICKSTART.md)** - 5분 안에 로컬 환경 실행
+
+#### 🤖 2단계: QuickSuite 설정
+4. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base 생성
+5. **[AgentCore MCP 설정 가이드](docs/AGENTCORE_MCP_SETUP.md)** - MCP 도구 연동
+
+#### ✅ 3단계: 아키텍처 문서 리뷰 수행
+6. 프론트엔드에서 아키텍처 문서 업로드
+7. QuickSuite Chat Agent를 통해 문서 검토
+8. 검토 결과 확인 및 저장
+
+### 간단 설치 (로컬 개발만)
+
+QuickSuite 설정 없이 기본 기능만 테스트하려면:
 
 ```bash
 # 1. 리포지토리 클론
@@ -80,9 +101,7 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 
 브라우저에서 http://localhost:5173 접속
 
-### 5분 빠른 시작
-
-더 자세한 가이드는 [빠른 시작 가이드](docs/QUICKSTART.md)를 참고하세요.
+> **참고**: 위 단계만으로는 문서 업로드 및 관리 기능만 사용 가능합니다. AI 기반 아키텍처 검토 기능을 사용하려면 위의 **전체 설정 프로세스**를 완료해야 합니다.
 
 ## 📚 문서
 
