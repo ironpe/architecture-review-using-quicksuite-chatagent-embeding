@@ -73,25 +73,25 @@ aws cognito-idp admin-set-user-password \
   --region us-east-1
 ```
 
-### 5단계: QuickSight 설정
+### 5단계: QuickSuite 설정
 
-#### QuickSight 구독 활성화
+#### QuickSuite 구독 활성화
 
-1. AWS 콘솔에서 QuickSight 서비스로 이동
-2. QuickSight 구독이 없다면 구독 시작
+1. AWS 콘솔에서 QuickSuite 서비스로 이동
+2. QuickSuite 구독이 없다면 구독 시작
 3. Enterprise Edition 선택 (Chat Agent 기능 필요)
 
 #### Chat Agent 생성
 
-1. QuickSight 콘솔에서 "Agents" 메뉴로 이동
+1. QuickSuite 콘솔에서 "Agents" 메뉴로 이동
 2. "Create agent" 클릭
 3. Agent 이름 입력 (예: "Architecture Review Agent")
 4. Agent 생성 완료 후 Agent ARN 복사
 
-#### QuickSight 사용자 생성
+#### QuickSuite 사용자 생성
 
 ```bash
-# QuickSight 사용자 생성 (IAM 사용자 기반)
+# QuickSuite 사용자 생성 (IAM 사용자 기반)
 aws quicksight register-user \
   --aws-account-id YOUR_ACCOUNT_ID \
   --namespace default \
@@ -161,9 +161,9 @@ TABLE_NAME=YOUR_TABLE_NAME
 BUCKET_NAME=YOUR_BUCKET_NAME
 ```
 
-### 8단계: QuickSight에 MCP 연결
+### 8단계: QuickSuite에 MCP 연결
 
-1. QuickSight 콘솔 접속
+1. QuickSuite 콘솔 접속
 2. "Integrations" → "Actions" → "Model Context Protocol" 클릭
 3. 다음 정보 입력:
    - **Name**: Architecture Review MCP
@@ -288,9 +288,9 @@ aws cognito-idp admin-get-user \
   --region us-east-1
 ```
 
-### QuickSight Agent 연결 오류
+### QuickSuite Agent 연결 오류
 
-1. QuickSight 콘솔에서 Agent 상태 확인
+1. QuickSuite 콘솔에서 Agent 상태 확인
 2. AgentCore Gateway URL 확인
 3. Cognito OAuth 설정 확인
 4. MCP 도구 목록 확인
@@ -304,9 +304,9 @@ aws cognito-idp admin-get-user \
 - **DynamoDB**: 프리 티어 내 무료 (25GB)
 - **S3**: $0.023/GB (스토리지) + 요청 비용
 - **Cognito**: 프리 티어 내 무료 (50,000 MAU)
-- **QuickSight**: $24/사용자/월 (Enterprise Edition)
+- **QuickSuite**: $24/사용자/월 (Enterprise Edition)
 
-**예상 총 비용**: 약 $30-50/월 (QuickSight 포함)
+**예상 총 비용**: 약 $30-50/월 (QuickSuite 포함)
 
 ## 📞 추가 지원
 
@@ -317,6 +317,6 @@ aws cognito-idp admin-get-user \
 ## 🎯 다음 단계
 
 배포가 완료되었다면:
-- [QuickSight 설정 가이드](QUICKSIGHT_SETUP.md) 참고
+- [QuickSuite 설정 가이드](QUICKSIGHT_SETUP.md) 참고
 - [AgentCore MCP 설정 가이드](AGENTCORE_MCP_SETUP.md) 참고
 - 프로덕션 환경 보안 강화 고려
