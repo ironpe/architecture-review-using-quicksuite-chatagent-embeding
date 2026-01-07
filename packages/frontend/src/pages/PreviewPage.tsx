@@ -194,6 +194,14 @@ function PreviewPage() {
                 <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
                   <Box>
                     <Typography variant="caption" color="text.secondary" display="block">
+                      파일 ID
+                    </Typography>
+                    <Typography variant="body2" fontWeight={500} sx={{ fontFamily: 'monospace' }}>
+                      {document.metadata.documentId}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="text.secondary" display="block">
                       업로드 날짜
                     </Typography>
                     <Typography variant="body2" fontWeight={500}>
