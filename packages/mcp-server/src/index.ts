@@ -15,7 +15,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const s3Client = new S3Client({ region: process.env.AWS_REGION || 'us-east-1' });
 
 const TABLE_NAME = process.env.TABLE_NAME || 'architecture-review-documents';
-const BUCKET_NAME = process.env.BUCKET_NAME || 'architecture-review-files-011528259648-us-east-1';
+const BUCKET_NAME = process.env.BUCKET_NAME || 'architecture-review-files-YOUR_ACCOUNT_ID-YOUR_REGION';
 
 // MCP Server
 const server = new Server(

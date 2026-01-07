@@ -9,7 +9,7 @@ Architecture Review System 사용 중 발생할 수 있는 일반적인 문제�
 - [인증 문제](#인증-문제)
 - [API 문제](#api-문제)
 - [파일 업로드 문제](#파일-업로드-문제)
-- [QuickSight 문제](#quicksight-문제)
+- [QuickSuite 문제](#quicksight-문제)
 - [성능 문제](#성능-문제)
 
 ## 설치 문제
@@ -318,7 +318,7 @@ aws s3 ls s3://YOUR_BUCKET_NAME/ --recursive
 aws logs tail /aws/lambda/MetadataHandler --follow --region us-east-1
 ```
 
-## QuickSight 문제
+## QuickSuite 문제
 
 ### Chat Widget이 표시되지 않음
 
@@ -326,13 +326,13 @@ aws logs tail /aws/lambda/MetadataHandler --follow --region us-east-1
 
 **해결**:
 1. 브라우저 콘솔 확인
-2. QuickSight Embed URL 확인:
+2. QuickSuite Embed URL 확인:
 ```bash
 # Lambda 로그 확인
-aws logs tail /aws/lambda/QuickSightEmbedHandler --follow --region us-east-1
+aws logs tail /aws/lambda/QuickSuiteEmbedHandler --follow --region us-east-1
 ```
 
-3. QuickSight 사용자 권한 확인:
+3. QuickSuite 사용자 권한 확인:
 ```bash
 aws quicksight describe-user \
   --aws-account-id YOUR_ACCOUNT_ID \

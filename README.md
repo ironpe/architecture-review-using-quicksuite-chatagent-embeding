@@ -1,6 +1,6 @@
 # Architecture Review System
 
-> Amazon Quick Suite Chat Agent를 이용한 아키텍처 검토 시스템 - Quick Suite Chat Agent와 Bedrock AgentCore Gateway를 활용한 자동화된 아키텍처 문서 검토
+> Amazon QuickSuite Chat Agent를 이용한 아키텍처 검토 시스템 - QuickSuite Chat Agent와 Bedrock AgentCore Gateway를 활용한 자동화된 아키텍처 문서 검토
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![AWS](https://img.shields.io/badge/AWS-Cloud-orange.svg)](https://aws.amazon.com/)
@@ -10,7 +10,7 @@
 
 ## 📖 소개
 
-이 Architecture Review System은 Agentic AI 기반의 Amazon Quick Suite의 Space, MCP Action, Knowledge base를 이용한 Agentic AI 기반 아키텍처 검토 시스템입니다. Quick Suite Chat Agent와 Space, Bedrock AgentCore Gateway, Lambda Target(MCP)을 통합하여 아키텍처 문서의 자동화된 검토 프로세스를 제공합니다.
+이 Architecture Review System은 Amazon Quick Suite의 Space, MCP Action, Knowledge base를 이용한 Agentic AI 기반 아키텍처 검토 시스템입니다. Quick Suite Chat Agent와 Space, Bedrock AgentCore Gateway, Lambda Target(MCP)을 통합하여 아키텍처 문서의 자동화된 검토 프로세스를 제공합니다.
 
 ### ✨ 주요 기능
 

@@ -1,12 +1,12 @@
-# QuickSight Chat Agent 설정 가이드
+# QuickSuite Chat Agent 설정 가이드
 
 ## 📋 개요
 
-Architecture Review System에 Amazon QuickSight Chat Agent가 통합되어 있습니다. 사용자는 우측 패널의 채팅 창을 통해 문서 조회, 검토 관리, 다이어그램 생성 등의 작업을 수행할 수 있습니다.
+Architecture Review System에 Amazon QuickSuite Chat Agent가 통합되어 있습니다. 사용자는 우측 패널의 채팅 창을 통해 문서 조회, 검토 관리, 다이어그램 생성 등의 작업을 수행할 수 있습니다.
 
 ## ✅ 구현 완료 사항
 
-### 1. QuickSight Chat Agent
+### 1. QuickSuite Chat Agent
 - **Agent ID**: `YOUR_AGENT_ID`
 - **Agent ARN**: `arn:aws:quicksight:YOUR_REGION:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID`
 - **User**: `YOUR_QUICKSIGHT_USER` (IAM 사용자)
@@ -25,7 +25,7 @@ Architecture Review System에 Amazon QuickSight Chat Agent가 통합되어 있�
 - ✅ 반응형 레이아웃
 
 ### 4. MCP Actions 통합
-QuickSight Chat Agent가 AgentCore Gateway를 통해 다음 작업 수행:
+QuickSuite Chat Agent가 AgentCore Gateway를 통해 다음 작업 수행:
 - `get_document` - 문서 정보 조회
 - `list_documents` - 문서 목록 조회
 - `update_review` - 검토 정보 업데이트
@@ -39,7 +39,7 @@ QuickSight Chat Agent가 AgentCore Gateway를 통해 다음 작업 수행:
 AWS_REGION=us-east-1
 AWS_ACCOUNT_ID=YOUR_AWS_ACCOUNT_ID
 
-# QuickSight
+# QuickSuite
 QUICKSIGHT_ACCOUNT_ID=YOUR_AWS_ACCOUNT_ID
 QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:YOUR_REGION:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID
 QUICKSIGHT_NAMESPACE=default
@@ -77,17 +77,17 @@ QUICKSIGHT_USER_NAME=YOUR_QUICKSIGHT_USER
 
 ### 다이어그램 생성
 ```
-"문서 b3ab4319...의 QuickSight BI 아키텍처 다이어그램을 생성해줘"
+"문서 b3ab4319...의 QuickSuite BI 아키텍처 다이어그램을 생성해줘"
 ```
 
 ## 🔐 AgentCore Gateway 연결
 
-QuickSight Chat Agent를 MCP 도구와 연결하는 방법은 `AGENTCORE_MCP_SETUP.md`를 참조하세요.
+QuickSuite Chat Agent를 MCP 도구와 연결하는 방법은 `AGENTCORE_MCP_SETUP.md`를 참조하세요.
 
 ### 간단 요약
-- **Gateway URL**: `https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
-- **Client ID**: `4vggdif6mbjps9gj3kj5equriv`
-- **Token URL**: `https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token`
+- **Gateway URL**: `https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp`
+- **Client ID**: `YOUR_MCP_CLIENT_ID`
+- **Token URL**: `https://YOUR_COGNITO_DOMAIN.auth.YOUR_REGION.amazoncognito.com/oauth2/token`
 
 상세한 설정 방법은 `AGENTCORE_MCP_SETUP.md` 문서를 참조하세요.
 
@@ -117,7 +117,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
 import { embedQuickChat } from 'amazon-quicksight-embedding-sdk';
 
 const embedChat = async () => {
-  const { embedUrl } = await getQuickSightEmbedUrl();
+  const { embedUrl } = await getQuickSuiteEmbedUrl();
   
   const chat = await embedQuickChat({
     url: embedUrl,
@@ -190,7 +190,7 @@ Agent ID가 올바르게 설정되지 않았습니다:
 
 ## 📊 비용
 
-- **QuickSight Enterprise Edition**: 사용자당 월 $18-24
+- **QuickSuite Enterprise Edition**: 사용자당 월 $18-24
 - **임베드 세션**: 추가 비용 없음
 - **API 호출**: 무료
 - **AgentCore Gateway**: 사용량 기반
@@ -211,8 +211,8 @@ Agent ID가 올바르게 설정되지 않았습니다:
 
 ## 📚 참고 자료
 
-- [QuickSight Embedded Chat](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
-- [QuickSight Embedding SDK](https://github.com/awslabs/amazon-quicksight-embedding-sdk)
+- [QuickSuite Embedded Chat](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
+- [QuickSuite Embedding SDK](https://github.com/awslabs/amazon-quicksight-embedding-sdk)
 - [MCP 프로토콜](https://modelcontextprotocol.io/)
 - `AGENTCORE_MCP_SETUP.md` - AgentCore Gateway 및 MCP 설정 가이드
 

@@ -6,7 +6,7 @@ set -e
 
 REGION="us-east-1"
 GATEWAY_NAME="architecture-review-gateway"
-LAMBDA_ARN="arn:aws:lambda:us-east-1:011528259648:function:ArchitectureReviewStack-McpServerHandler89A0C9C0-qqJwYOe88Yxw"
+LAMBDA_ARN="arn:aws:lambda:us-east-1:YOUR_ACCOUNT_ID:function:YOUR_MCP_LAMBDA_FUNCTION_NAME"
 
 echo "Creating AgentCore Gateway..."
 

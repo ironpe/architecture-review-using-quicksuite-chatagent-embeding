@@ -191,6 +191,3 @@ aws sts get-caller-identity
 aws configure get region
 ```
 
-## 📞 추가 지원
-
-문제가 계속되면 [GitHub Issues](https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding/issues)에 문의하세요.

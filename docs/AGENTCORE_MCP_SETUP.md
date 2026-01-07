@@ -2,13 +2,13 @@
 
 ## 📋 개요
 
-Amazon Bedrock AgentCore Gateway를 통해 QuickSight Chat Agent가 Lambda 함수를 MCP(Model Context Protocol) 도구로 사용할 수 있습니다.
+Amazon Bedrock AgentCore Gateway를 통해 QuickSuite Chat Agent가 Lambda 함수를 MCP(Model Context Protocol) 도구로 사용할 수 있습니다.
 
 ## ✅ 구현 완료 사항
 
 ### AgentCore Gateway
-- **Gateway ID**: `architecture-review-gateway-kpbft8efvb`
-- **URL**: `https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
+- **Gateway ID**: `YOUR_GATEWAY_ID`
+- **URL**: `https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp`
 - **인증**: Cognito JWT (2LO)
 - **리전**: us-east-1
 
@@ -22,18 +22,18 @@ Amazon Bedrock AgentCore Gateway를 통해 QuickSight Chat Agent가 Lambda 함�
 ## 🔐 Cognito 인증 설정
 
 ### Cognito User Pool
-- **User Pool ID**: `us-east-1_NBuxDH6cg`
-- **Domain**: `arch-review-1767661637.auth.us-east-1.amazoncognito.com`
+- **User Pool ID**: `YOUR_USER_POOL_ID`
+- **Domain**: `YOUR_COGNITO_DOMAIN.auth.YOUR_REGION.amazoncognito.com`
 
 ### MCP Client (Machine-to-Machine)
-- **Client ID**: `4vggdif6mbjps9gj3kj5equriv`
+- **Client ID**: `YOUR_MCP_CLIENT_ID`
 - **OAuth Flow**: `client_credentials`
 - **Scopes**: `architecture-review/read`, `architecture-review/write`
 - **Token URL**: `https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token`
 
-## 🚀 QuickSight에서 MCP 연결
+## 🚀 QuickSuite에서 MCP 연결
 
-### 1. QuickSight 콘솔 접속
+### 1. QuickSuite 콘솔 접속
 ```
 https://us-east-1.quicksight.aws.amazon.com/sn/start
 ```
@@ -45,13 +45,13 @@ https://us-east-1.quicksight.aws.amazon.com/sn/start
 
 **Connection Details:**
 - **Name**: Architecture Review MCP
-- **URL**: `https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
+- **URL**: `https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp`
 
 **Authentication:**
 - **Auth Type**: Service authentication (2LO)
-- **Client ID**: `4vggdif6mbjps9gj3kj5equriv`
+- **Client ID**: `YOUR_MCP_CLIENT_ID`
 - **Client Secret**: (Cognito에서 확인)
-- **Token URL**: `https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token`
+- **Token URL**: `https://YOUR_COGNITO_DOMAIN.auth.YOUR_REGION.amazoncognito.com/oauth2/token`
 
 ### 3. 도구 확인
 연결 후 다음 5개 도구가 표시되어야 합니다:
@@ -88,7 +88,7 @@ aws bedrock-agentcore-control create-gateway \
 ### 2. Lambda Target 추가
 ```bash
 aws bedrock-agentcore-control create-gateway-target \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --target-name "mcp-server" \
   --target-configuration '{
     "type": "LAMBDA",
@@ -103,7 +103,7 @@ aws bedrock-agentcore-control create-gateway-target \
 ```bash
 # target-config.json 파일 사용
 aws bedrock-agentcore-control update-gateway-target \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --target-identifier "target-id" \
   --target-configuration file://packages/infrastructure/target-config.json \
   --region us-east-1
@@ -157,14 +157,14 @@ aws bedrock-agentcore-control update-gateway-target \
 ### Gateway 정보 조회
 ```bash
 aws bedrock-agentcore-control get-gateway \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --region us-east-1
 ```
 
 ### Target 목록 조회
 ```bash
 aws bedrock-agentcore-control list-gateway-targets \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --region us-east-1
 ```
 
@@ -180,14 +180,14 @@ curl https://l52aq7f18l.execute-api.us-east-1.amazonaws.com/prod/mcp/health
 curl -X POST https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
-  -d "client_id=4vggdif6mbjps9gj3kj5equriv" \
+  -d "client_id=YOUR_MCP_CLIENT_ID" \
   -d "client_secret=YOUR_CLIENT_SECRET" \
   -d "scope=architecture-review/read architecture-review/write"
 ```
 
 ### 2. 도구 목록 조회
 ```bash
-curl -X POST https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp \
+curl -X POST https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -199,7 +199,7 @@ curl -X POST https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agen
 
 ### 3. 도구 호출
 ```bash
-curl -X POST https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp \
+curl -X POST https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

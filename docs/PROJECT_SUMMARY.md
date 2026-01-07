@@ -470,12 +470,12 @@ cdk deploy --require-approval never
 ```bash
 # Gateway 조회
 aws bedrock-agentcore-control get-gateway \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --region us-east-1
 
 # Target 목록
 aws bedrock-agentcore-control list-gateway-targets \
-  --gateway-identifier "architecture-review-gateway-kpbft8efvb" \
+  --gateway-identifier "YOUR_GATEWAY_ID" \
   --region us-east-1
 ```
 

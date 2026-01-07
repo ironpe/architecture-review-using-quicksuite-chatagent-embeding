@@ -34,14 +34,14 @@ ECR에 이미지를 푸시하고 Lambda 함수를 생성합니다.
 
 ```bash
 # ECR 로그인
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 011528259648.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
 
 # 이미지 빌드 및 태그
 docker build -t diagram-generator .
-docker tag diagram-generator:latest 011528259648.dkr.ecr.us-east-1.amazonaws.com/diagram-generator:latest
+docker tag diagram-generator:latest YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/diagram-generator:latest
 
 # ECR에 푸시
-docker push 011528259648.dkr.ecr.us-east-1.amazonaws.com/diagram-generator:latest
+docker push YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/diagram-generator:latest
 ```
 
 ## 사용 예시
