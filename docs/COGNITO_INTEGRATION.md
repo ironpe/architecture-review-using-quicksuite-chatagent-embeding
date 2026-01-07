@@ -31,15 +31,12 @@
 ### packages/frontend/.env
 ```bash
 # API Gateway endpoint
-VITE_API_BASE_URL=https://l52aq7f18l.execute-api.us-east-1.amazonaws.com/prod
+VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.YOUR_REGION.amazonaws.com/prod
 
 # Cognito Configuration
 VITE_AWS_REGION=us-east-1
-VITE_USER_POOL_ID=us-east-1_NBuxDH6cg
-VITE_USER_POOL_WEB_CLIENT_ID=2sgjj80hnjd470a6cgj1oc3bjj
-VITE_COGNITO_DOMAIN=arch-review-1767661637.auth.us-east-1.amazoncognito.com
-VITE_REDIRECT_SIGN_IN=http://localhost:5173
-VITE_REDIRECT_SIGN_OUT=http://localhost:5173/login
+VITE_USER_POOL_ID=YOUR_REGION_YOUR_USER_POOL_ID
+VITE_USER_POOL_WEB_CLIENT_ID=YOUR_WEB_CLIENT_ID
 ```
 
 ## 🚀 사용 방법
@@ -47,8 +44,8 @@ VITE_REDIRECT_SIGN_OUT=http://localhost:5173/login
 ### 로그인
 ```
 1. http://localhost:5173/login 접속
-2. Username: admin
-3. Password: Welcome123!
+2. Username: your-username
+3. Password: your-password
 4. ☑ "로그인 상태 유지" 체크 (선택)
 5. "로그인" 버튼 클릭
 ```
@@ -61,15 +58,15 @@ VITE_REDIRECT_SIGN_OUT=http://localhost:5173/login
 ## 🔑 Cognito 사용자 관리
 
 ### 현재 사용자
-- **Username**: `admin`
-- **Email**: `ironpe@amazon.com`
-- **Password**: `Welcome123!`
+- **Username**: `your-username`
+- **Email**: `your-email@example.com`
+- **Password**: `YourSecurePassword123!`
 
 ### 비밀번호 변경
 ```bash
 aws cognito-idp admin-set-user-password \
-  --user-pool-id us-east-1_NBuxDH6cg \
-  --username admin \
+  --user-pool-id YOUR_USER_POOL_ID \
+  --username your-username \
   --password "NewPassword123!" \
   --permanent \
   --region us-east-1
@@ -79,7 +76,7 @@ aws cognito-idp admin-set-user-password \
 ```bash
 # 사용자 생성
 aws cognito-idp admin-create-user \
-  --user-pool-id us-east-1_NBuxDH6cg \
+  --user-pool-id YOUR_USER_POOL_ID \
   --username newuser \
   --user-attributes Name=email,Value=user@example.com Name=email_verified,Value=true \
   --message-action SUPPRESS \
@@ -87,7 +84,7 @@ aws cognito-idp admin-create-user \
 
 # 비밀번호 설정
 aws cognito-idp admin-set-user-password \
-  --user-pool-id us-east-1_NBuxDH6cg \
+  --user-pool-id YOUR_USER_POOL_ID \
   --username newuser \
   --password "UserPassword123!" \
   --permanent \
@@ -104,8 +101,8 @@ import { Amplify } from 'aws-amplify';
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: 'us-east-1_NBuxDH6cg',
-      userPoolClientId: '2sgjj80hnjd470a6cgj1oc3bjj',
+      userPoolId: 'YOUR_USER_POOL_ID',
+      userPoolClientId: 'YOUR_CLIENT_ID',
     },
   },
 });
@@ -181,8 +178,8 @@ Remember Me 미체크:
 비밀번호가 설정되지 않았을 수 있습니다:
 ```bash
 aws cognito-idp admin-set-user-password \
-  --user-pool-id us-east-1_NBuxDH6cg \
-  --username admin \
+  --user-pool-id YOUR_USER_POOL_ID \
+  --username your-username \
   --password "Welcome123!" \
   --permanent \
   --region us-east-1
