@@ -1,0 +1,37 @@
+{
+  "name": "@architecture-review/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node esbuild.config.js",
+    "dev": "tsx src/local-server.ts",
+    "test": "npm run test:unit && npm run test:property",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "test:property": "vitest run --config vitest.property.config.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.962.0",
+    "@aws-sdk/client-quicksight": "^3.962.0",
+    "@aws-sdk/client-s3": "^3.962.0",
+    "@aws-sdk/lib-dynamodb": "^3.962.0",
+    "@aws-sdk/s3-request-presigner": "^3.962.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "multer": "^2.0.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.25",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "esbuild": "^0.19.11",
+    "fast-check": "^3.15.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@architecture-review/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for Architecture Review System",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "dev": "tsx src/http-server.ts",
+    "start": "node dist/http-server.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.709.0",
+    "@aws-sdk/client-s3": "^3.709.0",
+    "@aws-sdk/lib-dynamodb": "^3.709.0",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "esbuild": "^0.27.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
