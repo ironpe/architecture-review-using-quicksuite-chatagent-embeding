@@ -191,7 +191,7 @@ function DocumentListPage() {
       <Box sx={{ mb: 3, display: 'flex', gap: 2 }}>
         <TextField
           fullWidth
-          placeholder="파일명으로 검색..."
+          placeholder="파일명 또는 파일 ID로 검색..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}

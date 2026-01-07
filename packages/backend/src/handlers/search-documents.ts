@@ -9,8 +9,8 @@ const docClient = DynamoDBDocumentClient.from(dynamoClient);
 const TABLE_NAME = process.env.TABLE_NAME!;
 
 /**
- * Lambda handler for searching documents by filename
- * Performs case-insensitive search on filename field
+ * Lambda handler for searching documents by filename or document ID
+ * Performs case-insensitive search on filename and documentId fields
  */
 export async function handler(
   event: APIGatewayProxyEvent
@@ -41,10 +41,11 @@ export async function handler(
     const scanResult = await docClient.send(scanCommand);
     const allDocuments = (scanResult.Items || []) as DocumentMetadata[];
 
-    // Filter documents by filename (case-insensitive)
+    // Filter documents by filename or documentId (case-insensitive)
     const lowerQuery = query.toLowerCase();
     const matchingDocuments = allDocuments.filter(doc => 
-      doc.filename.toLowerCase().includes(lowerQuery)
+      doc.filename.toLowerCase().includes(lowerQuery) ||
+      doc.documentId.toLowerCase().includes(lowerQuery)
     );
 
     // Sort by uploadTimestamp descending (newest first)
