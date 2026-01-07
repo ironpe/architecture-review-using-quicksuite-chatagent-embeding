@@ -2,7 +2,7 @@
 
 이 문서는 Architecture Review System을 AWS에 배포하는 방법을 안내합니다.
 
-> **참고**: 이 가이드는 백엔드(Lambda, API Gateway, DynamoDB, S3) 배포만 다룹니다. 프론트엔드는 로컬 개발 서버로 실행하며, AWS에 배포하지 않습니다. 필요한 경우, 프론트엔드를 AWS에 배포하는 것은 별도로 진행해야 합니다.
+> **참고**: 이 가이드는 백엔드(Lambda, API Gateway, DynamoDB, S3, AgentCore GateWay, Cognito) 배포만 다룹니다. 프론트엔드는 로컬 개발 서버로 실행하며, AWS에 배포하지 않습니다. 필요한 경우, 프론트엔드를 AWS에 배포하는 것은 별도로 진행해야 합니다.
 
 ## 📋 사전 준비
 
@@ -176,7 +176,77 @@ BUCKET_NAME=YOUR_BUCKET_NAME
 4. "Connect" 클릭
 5. 5개의 MCP 도구가 표시되는지 확인
 
-### 9단계: 프론트엔드 실행
+### 9단계: QuickSuite Space 등록
+
+#### 9.1 S3 접근 권한 등록
+
+QuickSuite가 S3 버킷에 접근할 수 있도록 권한을 설정합니다:
+
+```bash
+# QuickSuite 서비스 역할에 S3 읽기 권한 추가
+aws iam attach-role-policy \
+  --role-name YOUR_QUICKSUITE_SERVICE_ROLE \
+  --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess \
+  --region us-east-1
+```
+
+또는 특정 버킷에만 권한 부여:
+
+```bash
+# 인라인 정책 생성
+aws iam put-role-policy \
+  --role-name YOUR_QUICKSUITE_SERVICE_ROLE \
+  --policy-name QuickSuiteS3Access \
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        "Resource": [
+          "arn:aws:s3:::YOUR_BUCKET_NAME",
+          "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+        ]
+      }
+    ]
+  }'
+```
+
+#### 9.2 S3 Knowledge Base 생성
+
+1. QuickSuite 콘솔에서 "Knowledge bases" 메뉴로 이동
+2. "Create knowledge base" 클릭
+3. 다음 정보 입력:
+   - **Name**: Architecture Review Documents
+   - **Description**: 아키텍처 검토 문서 저장소
+   - **Data source type**: Amazon S3
+   - **S3 URI**: `s3://YOUR_BUCKET_NAME/documents/`
+4. "Create" 클릭
+
+#### 9.3 Space 생성 및 Knowledge Base 연결
+
+1. QuickSuite 콘솔에서 "Spaces" 메뉴로 이동
+2. "Create space" 클릭
+3. 다음 정보 입력:
+   - **Space name**: Architecture Review Space
+   - **Description**: 아키텍처 검토를 위한 작업 공간
+4. "Knowledge bases" 섹션에서:
+   - "Add knowledge base" 클릭
+   - 앞서 생성한 "Architecture Review Documents" 선택
+5. "Create space" 클릭
+
+#### 9.4 Chat Agent에 Space 연결
+
+1. QuickSuite 콘솔에서 생성한 Chat Agent로 이동
+2. "Settings" → "Spaces" 클릭
+3. "Add space" 클릭
+4. 생성한 "Architecture Review Space" 선택
+5. "Save" 클릭
+
+### 10단계: 프론트엔드 실행
 
 ```bash
 cd packages/frontend
@@ -214,6 +284,8 @@ curl https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod/health
 1. 우측 하단 채팅 버튼 클릭
 2. "문서 목록을 보여줘" 입력
 3. Agent 응답 확인
+4. 채팅 창에 "[문서]에 대해 아키텍처 리뷰 진행해줘" 입력
+5. 채팅 창에 "리뷰 결과를 저장하고, 검토 완료로 상태 변경해줘" 입력
 
 ## 🔄 업데이트 배포
 
