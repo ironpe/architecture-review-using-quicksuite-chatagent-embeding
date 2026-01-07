@@ -2,7 +2,7 @@
 
 ## 📋 프로젝트 개요
 
-AWS 기반 아키텍처 검토 시스템으로, 문서 업로드, QuickSight Chat Agent 통합, AgentCore Gateway를 통한 자동화된 검토 프로세스를 제공합니다.
+AWS 기반 아키텍처 검토 시스템으로, 문서 업로드, QuickSuite Chat Agent 통합, AgentCore Gateway를 통한 자동화된 검토 프로세스를 제공합니다.
 
 ## 🏗️ 아키텍처
 
@@ -14,7 +14,7 @@ AWS 기반 아키텍처 검토 시스템으로, 문서 업로드, QuickSight Cha
   - 문서 목록 및 검색
   - 문서 미리보기
   - 검토 결과 보기 (마크다운 렌더링)
-  - QuickSight Chat Agent 임베딩
+  - QuickSuite Chat Agent 임베딩
 
 ### 백엔드
 - **기술 스택**: Node.js + TypeScript + AWS Lambda
@@ -47,26 +47,23 @@ AWS 기반 아키텍처 검토 시스템으로, 문서 업로드, QuickSight Cha
 - ✅ 검토 결과 S3 저장 (마크다운 형식)
 - ✅ 검토 결과 보기 (마크다운 렌더링)
 
-### 3. QuickSight Chat Agent 통합
+### 3. QuickSuite Chat Agent 통합
 - ✅ Registered User Embedding 방식 구현
-- ✅ QuickSight Embedding SDK 사용
+- ✅ QuickSuite Embedding SDK 사용
 - ✅ 우측 패널에 채팅 창 임베딩
 - ✅ 크기 조절 가능 (300px-800px)
 - ✅ 한국어 로케일 설정
-- ✅ 특정 Agent 고정 (`ef4cec92-6280-4c25-8e9a-c49814b73283`)
+- ✅ Space 및 Knowledge Base 연동
 
 ### 4. 인증 시스템 (Cognito)
 - ✅ AWS Amplify 통합
-- ✅ 이메일/패스워드 로그인
+- ✅ Username/Password 직접 로그인
 - ✅ 이메일 자동완성 (Remember Email)
 - ✅ 로그인 상태 유지 (Remember Me - 30일)
 - ✅ 자동 토큰 관리 및 갱신
 - ✅ 세션 자동 복원
 - ✅ 실제 username 표시
 - ✅ 보호된 라우트
-- ✅ Amazon Bedrock AgentCore Gateway 생성
-- ✅ Cognito JWT 인증 설정
-- ✅ Lambda 함수를 MCP 도구로 노출
 
 ### 5. AgentCore Gateway + MCP 도구
 - ✅ Amazon Bedrock AgentCore Gateway 생성
@@ -79,14 +76,14 @@ AWS 기반 아키텍처 검토 시스템으로, 문서 업로드, QuickSight Cha
 3. `update_review` - 검토 정보 업데이트
 4. `save_review_to_s3` - 검토 결과 마크다운 저장
 5. `generate_diagram` - Mermaid 다이어그램 생성
-1. `get_document` - 문서 정보 조회
-2. `list_documents` - 문서 목록 조회
-3. `update_review` - 검토 정보 업데이트
-4. `save_review_to_s3` - 검토 결과 마크다운 저장
-5. `generate_diagram` - Mermaid 다이어그램 생성
 
-**제공하는 MCP 도구:**
-### 6. UI/UX
+### 6. QuickSuite Space 및 Knowledge Base
+- ✅ S3 기반 Knowledge Base 생성
+- ✅ Space 생성 및 Knowledge Base 연결
+- ✅ Chat Agent에 Space 연동
+- ✅ 문서 검색 및 컨텍스트 제공
+
+### 7. UI/UX
 - ✅ 상태 컬럼 (검토 완료/검토 필요) - 사각형 칩
 - ✅ 검토 완료일 컬럼 (YYYY-MM-DD HH:mm)
 - ✅ 작업 버튼 (미리보기/검토 결과/삭제)
@@ -151,32 +148,32 @@ interface DocumentMetadata {
 ## 🔐 보안 설정
 
 ### Cognito User Pool
-- **User Pool ID**: `us-east-1_NBuxDH6cg`
-- **Domain**: `arch-review-1767661637`
+- **User Pool ID**: `YOUR_USER_POOL_ID`
+- **Domain**: `YOUR_COGNITO_DOMAIN`
 - **Region**: `us-east-1`
 
 ### App Clients
-1. **QuickSight MCP Client** (Machine-to-Machine):
-   - Client ID: `4vggdif6mbjps9gj3kj5equriv`
+1. **QuickSuite MCP Client** (Machine-to-Machine):
+   - Client ID: `YOUR_MCP_CLIENT_ID`
    - OAuth Flow: `client_credentials`
    - Scopes: `architecture-review/read`, `architecture-review/write`
 
 2. **Web Application Client**:
-   - Client ID: `2sgjj80hnjd470a6cgj1oc3bjj`
+   - Client ID: `YOUR_WEB_CLIENT_ID`
    - OAuth Flows: `code`
    - Scopes: `openid`, `email`, `profile`
    - Callback URLs: `http://localhost:5173`
 
 ### 사용자
-- **Username**: `admin`
-- **Email**: `ironpe@amazon.com`
-- **Password**: `Welcome123!`
+- **Username**: `your-username`
+- **Email**: `your-email@example.com`
+- **Password**: `YourSecurePassword123!`
 - **Status**: ✅ CONFIRMED
 
 ## 🌐 API 엔드포인트
 
 ### REST API
-- **Base URL**: `https://l52aq7f18l.execute-api.us-east-1.amazonaws.com/prod`
+- **Base URL**: `https://YOUR_API_ID.execute-api.YOUR_REGION.amazonaws.com/prod`
 
 **문서 관리:**
 - `POST /documents/upload-url` - 업로드 URL 생성
@@ -190,8 +187,8 @@ interface DocumentMetadata {
 - `PUT /documents/review` - 검토 정보 업데이트
 - `GET /documents/review/{documentId}` - 검토 결과 조회
 
-**QuickSight:**
-- `GET /quicksight/embed-url` - Chat Agent 임베드 URL 생성
+**QuickSuite:**
+- `GET /quicksuite/embed-url` - Chat Agent 임베드 URL 생성
 
 **MCP:**
 - `POST /mcp/v1/tools/list` - MCP 도구 목록
@@ -199,16 +196,16 @@ interface DocumentMetadata {
 - `GET /mcp/health` - 헬스 체크
 
 ### AgentCore Gateway
-- **URL**: `https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
+- **URL**: `https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp`
 - **Auth**: Cognito JWT
-- **Token URL**: `https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token`
+- **Token URL**: `https://YOUR_COGNITO_DOMAIN.auth.YOUR_REGION.amazoncognito.com/oauth2/token`
 
-## 🤖 QuickSight Chat Agent
+## 🤖 QuickSuite Chat Agent
 
 ### Agent 정보
 - **Agent ID**: `YOUR_AGENT_ID`
 - **Agent ARN**: `arn:aws:quicksight:YOUR_REGION:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID`
-- **User**: `YOUR_QUICKSIGHT_USER` (IAM 사용자)
+- **User**: `YOUR_QUICKSUITE_USER` (IAM 사용자)
 
 ### 임베딩 방식
 - **방법**: Registered User Embedding
@@ -217,11 +214,16 @@ interface DocumentMetadata {
 - **Locale**: ko-KR
 
 ### MCP Actions 통합
-QuickSight Chat Agent가 AgentCore Gateway를 통해 다음 작업 수행:
+QuickSuite Chat Agent가 AgentCore Gateway를 통해 다음 작업 수행:
 - 문서 조회 및 목록
 - 검토 정보 업데이트
 - 검토 결과 S3 저장
 - Mermaid 다이어그램 생성
+
+### Space 및 Knowledge Base
+- S3 기반 Knowledge Base로 문서 검색
+- Space를 통한 컨텍스트 관리
+- Chat Agent와 Knowledge Base 연동
 
 ## 📁 프로젝트 구조
 
@@ -230,7 +232,7 @@ packages/
 ├── frontend/                    # React 프론트엔드
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── ChatWidget.tsx   # QuickSight Chat 위젯
+│   │   │   ├── ChatWidget.tsx   # QuickSuite Chat 위젯
 │   │   │   ├── ChatButton.tsx   # 채팅 버튼
 │   │   │   └── Layout.tsx       # 레이아웃
 │   │   ├── pages/
@@ -240,7 +242,7 @@ packages/
 │   │   │   └── LoginPage.tsx         # 로그인
 │   │   ├── services/
 │   │   │   ├── api.ts            # API 클라이언트
-│   │   │   └── quicksight.ts     # QuickSight API
+│   │   │   ├── quicksight.ts     # QuickSuite API
 │   │   ├── config/
 │   │   │   ├── api.ts            # API 설정
 │   │   │   └── cognito.ts        # Cognito 설정
@@ -258,7 +260,7 @@ packages/
 │   │   │   ├── delete-document.ts    # 문서 삭제
 │   │   │   ├── update-review.ts      # 검토 업데이트
 │   │   │   ├── get-review.ts         # 검토 결과 조회
-│   │   │   ├── quicksight-embed.ts   # QuickSight 임베드 URL
+│   │   │   ├── quicksight-embed.ts   # QuickSuite 임베드 URL
 │   │   │   └── generate-diagram.ts   # 다이어그램 생성
 │   │   ├── types/                # TypeScript 타입
 │   │   └── utils/                # 유틸리티
@@ -296,7 +298,7 @@ packages/
 - ✅ DeleteDocumentHandler
 - ✅ UpdateReviewHandler
 - ✅ GetReviewHandler
-- ✅ QuickSightEmbedHandler
+- ✅ QuickSuiteEmbedHandler
 - ✅ McpServerHandler
 
 ### API Gateway
@@ -314,15 +316,12 @@ packages/
 ### 프론트엔드 (.env)
 ```bash
 # API Gateway endpoint
-VITE_API_BASE_URL=https://l52aq7f18l.execute-api.us-east-1.amazonaws.com/prod
+VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.YOUR_REGION.amazonaws.com/prod
 
 # Cognito Configuration
 VITE_AWS_REGION=us-east-1
-VITE_USER_POOL_ID=us-east-1_NBuxDH6cg
-VITE_USER_POOL_WEB_CLIENT_ID=2sgjj80hnjd470a6cgj1oc3bjj
-VITE_COGNITO_DOMAIN=arch-review-1767661637.auth.us-east-1.amazoncognito.com
-VITE_REDIRECT_SIGN_IN=http://localhost:5173
-VITE_REDIRECT_SIGN_OUT=http://localhost:5173/login
+VITE_USER_POOL_ID=YOUR_USER_POOL_ID
+VITE_USER_POOL_WEB_CLIENT_ID=YOUR_CLIENT_ID
 ```
 
 ### 백엔드 (.env)
@@ -348,16 +347,16 @@ BUCKET_NAME=YOUR_BUCKET_NAME
 PORT=3002
 ```
 
-## 📝 QuickSight MCP 연결 정보
+## 📝 QuickSuite MCP 연결 정보
 
 ### AgentCore Gateway
-- **URL**: `https://architecture-review-gateway-kpbft8efvb.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`
+- **URL**: `https://YOUR_GATEWAY_ID.gateway.bedrock-agentcore.YOUR_REGION.amazonaws.com/mcp`
 - **Auth Type**: Service authentication (2LO)
-- **Client ID**: `4vggdif6mbjps9gj3kj5equriv`
-- **Token URL**: `https://arch-review-1767661637.auth.us-east-1.amazoncognito.com/oauth2/token`
+- **Client ID**: `YOUR_MCP_CLIENT_ID`
+- **Token URL**: `https://YOUR_COGNITO_DOMAIN.auth.YOUR_REGION.amazoncognito.com/oauth2/token`
 
-### QuickSight 콘솔 연결 방법
-1. https://us-east-1.quicksight.aws.amazon.com/sn/start
+### QuickSuite 콘솔 연결 방법
+1. https://YOUR_REGION.quicksight.aws.amazon.com/sn/start
 2. Integrations → Actions → Model Context Protocol (+)
 3. 위 정보 입력
 4. 5개 도구 확인 후 완료
@@ -367,12 +366,12 @@ PORT=3002
 ### 문서 조회
 ```
 "문서 목록을 보여줘"
-"문서 b3ab4319...의 정보를 조회해줘"
+"문서 YOUR_DOCUMENT_ID의 정보를 조회해줘"
 ```
 
 ### 검토 수행
 ```
-"문서 b3ab4319...의 검토를 시작해줘. 검토자는 김철수로 설정해줘"
+"문서 YOUR_DOCUMENT_ID의 검토를 시작해줘. 검토자는 김철수로 설정해줘"
 
 "아키텍처 개요를 '마이크로서비스 기반 BI 시스템'으로 업데이트해줘"
 
@@ -395,14 +394,14 @@ PORT=3002
 
 ### 다이어그램 생성
 ```
-"문서 b3ab4319...의 QuickSight BI 아키텍처 다이어그램을 생성해줘"
+"문서 YOUR_DOCUMENT_ID의 QuickSuite BI 아키텍처 다이어그램을 생성해줘"
 ```
 
 ## 🎨 Chat Agent 사용 예시
 
 ### AWS 공식 문서
-- [QuickSight Embedded Chat](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
-- [QuickSight Embedding SDK](https://github.com/awslabs/amazon-quicksight-embedding-sdk)
+- [QuickSuite Embedded Chat](https://aws.amazon.com/blogs/business-intelligence/announcing-embedded-chat-in-amazon-quick-suite/)
+- [QuickSuite Embedding SDK](https://github.com/awslabs/amazon-quicksight-embedding-sdk)
 - [AgentCore Gateway](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)
 - [MCP 프로토콜](https://modelcontextprotocol.io/)
 - [AWS Diagram MCP](https://aws.amazon.com/blogs/machine-learning/build-aws-architecture-diagrams-using-amazon-q-cli-and-mcp/)
@@ -410,7 +409,7 @@ PORT=3002
 ### 프로젝트 문서
 - `README.md` - 빠른 시작 가이드
 - `COGNITO_INTEGRATION.md` - Cognito 통합 가이드
-- `QUICKSIGHT_SETUP.md` - QuickSight 설정 가이드
+- `QUICKSIGHT_SETUP.md` - QuickSuite 설정 가이드
 - `AGENTCORE_MCP_SETUP.md` - AgentCore Gateway 및 MCP 설정 가이드
 
 ## 🔄 다음 단계
@@ -483,10 +482,11 @@ aws bedrock-agentcore-control list-gateway-targets \
 ## 🎯 성과
 
 1. **완전한 서버리스 아키텍처**: Lambda + API Gateway + DynamoDB + S3
-2. **AI 기반 검토**: QuickSight Chat Agent 통합
+2. **Agentic AI 기반 아키텍처 검토**: QuickSuite Chat Agent 통합
 3. **자동화된 워크플로우**: MCP 도구를 통한 검토 프로세스 자동화
 4. **보안 인증**: Cognito 기반 사용자 인증 및 세션 관리
 5. **확장 가능**: 새로운 MCP 도구 추가 용이
+6. **Knowledge Base 연동**: S3 기반 문서 검색 및 컨텍스트 제공
 
 ## 📞 문의 및 지원
 
