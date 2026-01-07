@@ -194,11 +194,11 @@ sequenceDiagram
 ```mermaid
 graph LR
     subgraph "QuickSuite Chat Agent"
-        Agent[Chat Agent<br/>ef4cec92...]
+        Agent[Chat Agent]
     end
 
     subgraph "AgentCore Gateway"
-        Gateway[Gateway<br/>kpbft8efvb]
+        Gateway[Gateway]
         Auth[Cognito JWT<br/>Authentication]
     end
 
@@ -257,24 +257,20 @@ erDiagram
         string reviewResultLocation
     }
 
-    S3_FILE {
-        string s3Key PK
-        string bucket
-        binary content
-        string contentType
+    S3_BUCKET {
+        string key
+        binary fileContent
+        string reviewMarkdown
     }
 
-    REVIEW_RESULT {
-        string documentId FK
-        string s3Key FK
-        string markdown
-        string createdAt
-    }
-
-    DOCUMENT ||--o| S3_FILE : "stores file in"
-    DOCUMENT ||--o| REVIEW_RESULT : "has review"
-    REVIEW_RESULT ||--|| S3_FILE : "stored as"
+    DOCUMENT ||--o{ S3_BUCKET : "stores files and reviews in"
 ```
+
+**실제 구현:**
+- **DynamoDB 테이블**: `architecture-review-documents` (문서 메타데이터 저장)
+- **S3 버킷**: `architecture-review-files-*` (파일 및 검토 결과 저장)
+  - 업로드된 파일: `documents/{documentId}/{filename}`
+  - 검토 결과: `reviews/{documentId}/review.md`
 
 ## 🌐 네트워크 아키텍처
 
