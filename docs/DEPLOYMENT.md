@@ -2,6 +2,8 @@
 
 이 문서는 Architecture Review System을 AWS에 배포하는 방법을 안내합니다.
 
+> **참고**: 이 가이드는 백엔드(Lambda, API Gateway, DynamoDB, S3) 배포만 다룹니다. 프론트엔드는 로컬 개발 서버로 실행하며, AWS에 배포하지 않습니다. 필요한 경우, 프론트엔드를 AWS에 배포하는 것은 별도로 진행해야 합니다.
+
 ## 📋 사전 준비
 
 - [설치 가이드](INSTALLATION.md)를 완료했는지 확인
