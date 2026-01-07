@@ -50,3 +50,6 @@ coverage/
 # Temporary files
 *.tmp
 .cache/
+
+# Internal documentation
+GITHUB_PREP_SUMMARY.md
