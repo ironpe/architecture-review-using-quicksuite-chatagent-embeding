@@ -75,9 +75,9 @@ graph TB
 7. QuickSuite Chat Agent를 통해 문서 검토
 8. 검토 결과 확인 및 저장
 
-### 간단 설치 (로컬 개발만)
+### 간단 설치 (아키텍처 문서 리뷰 기능없이)
 
-QuickSuite 설정 없이 기본 기능만 테스트하려면:
+프론트엔드 설치, Cognito 설치, QuickSuite Chat Agent 임베딩, 백엔드 배포, AgentCore Gateway 배포, MCP 통합 기능만 테스트하려면:
 
 ```bash
 # 1. 리포지토리 클론
@@ -101,7 +101,7 @@ cd architecture-review-using-quicksuite-chatagent-embeding
 
 브라우저에서 http://localhost:5173 접속
 
-> **참고**: 위 단계만으로는 문서 업로드 및 관리 기능만 사용 가능합니다. AI 기반 아키텍처 검토 기능을 사용하려면 위의 **전체 설정 프로세스**를 완료해야 합니다.
+> **참고**: 위 단계만으로는 문서 업로드 및 관리 기능만 사용 가능합니다. Agentic AI 기반 아키텍처 검토 기능을 사용하려면 위의 **전체 설정 프로세스**를 완료해야 합니다.
 
 ## 📚 문서
 
