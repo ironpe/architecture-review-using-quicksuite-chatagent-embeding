@@ -64,69 +64,32 @@ graph TB
 이 시스템을 완전히 설정하고 아키텍처 문서 리뷰를 수행하려면 다음 단계를 순서대로 진행하세요:
 
 #### 📖 1단계: 기본 설치 및 배포
+빠르게 설치 및 인프라 배포를 위해서는 아래 **빠른 시작 가이드**를 따르세요.
+**[빠른 시작 가이드](docs/QUICKSTART.md)** - 자동화 스크립트로 5분 안에 시작
+
+단계별 가이드를 위해 아래의 **설치 가이드와 배포 가이드**를 따르세요.
 1. **[설치 가이드](docs/INSTALLATION.md)** - 사전 요구사항 및 환경 설정
 2. **[배포 가이드](docs/DEPLOYMENT.md)** - AWS 리소스 배포
    - CDK 인프라 배포 (Lambda, API Gateway, DynamoDB, S3)
    - AgentCore Gateway 설정 (Cognito 포함)
    - 환경 변수 자동 업데이트
    - Cognito 사용자 생성
-3. **[빠른 시작 가이드](docs/QUICKSTART.md)** - 자동화 스크립트로 5분 안에 시작
 
-#### 🤖 2단계: QuickSuite 통합 (선택 사항)
-4. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base, MCP 연결
+#### 🤖 2단계: QuickSuite 통합
+3. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base, MCP 연결
 
-> **참고**: 1단계만 완료해도 문서 업로드/관리 기능은 사용 가능합니다. QuickSuite Chat Agent 기능이 필요한 경우에만 2단계를 진행하세요.
 
 #### ✅ 3단계: 아키텍처 문서 리뷰 수행
-5. 프론트엔드에서 아키텍처 문서 업로드
-6. QuickSuite Chat Agent를 통해 문서 검토
-7. 검토 결과 확인 및 저장
-
-### 자동화 스크립트를 사용한 빠른 설치
-
-자동화 스크립트를 사용하면 대부분의 설정을 자동으로 완료할 수 있습니다:
-
-```bash
-# 1. 리포지토리 클론
-git clone https://github.com/ironpe/architecture-review-using-quicksuite-chatagent-embeding.git
-cd architecture-review-using-quicksuite-chatagent-embeding
-
-# 2. 의존성 설치
-npm install --workspaces
-
-# 3. 백엔드 및 MCP 서버 빌드
-cd packages/backend && npm run build && cd ../..
-cd packages/mcp-server && npm run build && cd ../..
-
-# 4. CDK 부트스트랩 및 배포
-cd packages/infrastructure
-npx cdk bootstrap aws://YOUR_ACCOUNT_ID/us-east-1
-npx cdk deploy --all --require-approval never
-
-# 5. AgentCore Gateway 자동 설정
-./scripts/setup-agentcore.sh
-
-# 6. 환경 변수 자동 업데이트
-./scripts/update-env.sh
-
-# 7. Cognito 사용자 생성
-./scripts/create-cognito-user.sh
-
-# 8. 프론트엔드 실행
-cd ../../packages/frontend
-npm run dev
-```
-
-브라우저에서 http://localhost:5173 접속
-
-> **참고**: QuickSuite Chat Agent 기능을 사용하려면 5-7단계(QuickSuite 설정, MCP 연결, Space 등록)를 추가로 완료해야 합니다. 자세한 내용은 [배포 가이드](docs/DEPLOYMENT.md)를 참고하세요.
+3. 프론트엔드에서 아키텍처 문서 업로드
+4. QuickSuite Chat Agent를 통해 문서 검토
+5. 검토 결과 확인 및 저장
 
 ## 📚 문서
 
 ### 시작하기
+- [빠른 시작](docs/QUICKSTART.md) - 자동화 스크립트로 5분 안에 시작하기
 - [설치 가이드](docs/INSTALLATION.md) - 상세한 설치 방법
 - [배포 가이드](docs/DEPLOYMENT.md) - AWS 리소스 배포
-- [빠른 시작](docs/QUICKSTART.md) - 자동화 스크립트로 5분 안에 시작하기
 
 ### 설정 가이드
 - [Cognito 통합](docs/COGNITO_INTEGRATION.md) - 인증 설정
@@ -136,7 +99,6 @@ npm run dev
 ### 참고 자료
 - [아키텍처](docs/ARCHITECTURE.md) - 시스템 아키텍처
 - [프로젝트 요약](docs/PROJECT_SUMMARY.md) - 전체 프로젝트 개요
-- [문제 해결](docs/TROUBLESHOOTING.md) - 일반적인 문제 해결
 - [문제 해결](docs/TROUBLESHOOTING.md) - 일반적인 문제 해결
 
 ## 🛠️ 기술 스택

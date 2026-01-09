@@ -177,9 +177,7 @@ aws cognito-idp admin-set-user-password \
 ```
 
 
-### 5단계: QuickSuite 설정 (선택 사항)
-
-> **참고**: QuickSuite Chat Agent 기능이 필요한 경우에만 진행하세요. 기본 문서 업로드/관리 기능은 1-4단계만으로 사용 가능합니다.
+### 5단계: QuickSuite 설정
 
 QuickSuite Chat Agent, Space, Knowledge Base, MCP 연결 설정은 **[QuickSuite 설정 가이드](QUICKSIGHT_SETUP.md)**를 참고하세요.
 
