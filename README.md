@@ -73,15 +73,14 @@ graph TB
 3. **[빠른 시작 가이드](docs/QUICKSTART.md)** - 자동화 스크립트로 5분 안에 시작
 
 #### 🤖 2단계: QuickSuite 통합 (선택 사항)
-4. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base 생성
-5. **[AgentCore MCP 설정 가이드](docs/AGENTCORE_MCP_SETUP.md)** - MCP 도구 연동 상세 가이드
+4. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base, MCP 연결
 
 > **참고**: 1단계만 완료해도 문서 업로드/관리 기능은 사용 가능합니다. QuickSuite Chat Agent 기능이 필요한 경우에만 2단계를 진행하세요.
 
 #### ✅ 3단계: 아키텍처 문서 리뷰 수행
-6. 프론트엔드에서 아키텍처 문서 업로드
-7. QuickSuite Chat Agent를 통해 문서 검토
-8. 검토 결과 확인 및 저장
+5. 프론트엔드에서 아키텍처 문서 업로드
+6. QuickSuite Chat Agent를 통해 문서 검토
+7. 검토 결과 확인 및 저장
 
 ### 자동화 스크립트를 사용한 빠른 설치
 
@@ -131,8 +130,8 @@ npm run dev
 
 ### 설정 가이드
 - [Cognito 통합](docs/COGNITO_INTEGRATION.md) - 인증 설정
-- [Quick Suite 설정](docs/QUICKSIGHT_SETUP.md) - Chat Agent 설정
-- [AgentCore Gateway+MCP 통합 설정](docs/AGENTCORE_MCP_SETUP.md) - MCP 도구 연동
+- [QuickSuite 설정](docs/QUICKSIGHT_SETUP.md) - Chat Agent, Space, MCP 연결
+- [AgentCore MCP 설정](docs/AGENTCORE_MCP_SETUP.md) - MCP 통합 상세 가이드 (참고용)
 
 ### 참고 자료
 - [아키텍처](docs/ARCHITECTURE.md) - 시스템 아키텍처
