@@ -12,23 +12,7 @@
 
 ## 🚀 배포 단계
 
-### 1단계: 백엔드 빌드
-
-```bash
-cd packages/backend
-npm run build
-```
-
-빌드가 성공하면 `dist/` 폴더에 Lambda 함수 코드가 생성됩니다.
-
-### 2단계: MCP 서버 빌드
-
-```bash
-cd packages/mcp-server
-npm run build
-```
-
-### 3단계: CDK 인프라 배포
+### 1단계: CDK 인프라 배포
 
 ```bash
 cd packages/infrastructure
@@ -44,26 +28,143 @@ npx cdk deploy --all --require-approval never
 ```
 
 배포가 완료되면 다음 정보가 출력됩니다:
-- API Gateway URL
-- S3 버킷 이름
-- DynamoDB 테이블 이름
-- Cognito User Pool ID
-- Cognito Client ID
+- **ApiEndpoint**: API Gateway URL
+- **FilesBucketName**: S3 버킷 이름
+- **DocumentsTableName**: DynamoDB 테이블 이름
+- **LambdaExecutionRoleArn**: Lambda 실행 역할 ARN
+- **McpServerEndpoint**: MCP 서버 기본 엔드포인트 (QuickSuite MCP Action 등록 시 사용)
 
-**중요**: 이 정보들을 메모해두세요. 환경 변수 설정에 필요합니다.
+**중요**: 이 정보들을 메모해두세요. 환경 변수 설정 및 QuickSuite MCP 연동에 필요합니다.
+
+> **참고**: Cognito User Pool과 Client는 별도의 AgentCore Gateway 스택에서 생성됩니다. 현재 CDK 버전에서는 AgentCore Gateway의 CfnGateway 리소스를 사용할 수 없어 수동으로 설정해야 합니다.
+
+### 2단계: AgentCore Gateway 설정
+
+> **중요**: 이 프로젝트는 QuickSuite Chat Agent와 AgentCore Gateway를 통한 MCP 통합이 핵심 기능입니다. AgentCore Gateway 설정을 먼저 완료해야 모든 환경 변수를 한 번에 업데이트할 수 있습니다.
+
+#### 자동 설정 (권장)
+
+자동화 스크립트를 사용하여 Cognito, AgentCore Gateway, Lambda Target을 설정합니다:
+
+```bash
+cd packages/infrastructure
+./scripts/setup-agentcore.sh
+```
+
+스크립트는 다음을 자동으로 수행합니다:
+1. ✅ Cognito User Pool 생성
+2. ✅ User Pool Domain 생성
+3. ✅ Resource Server 및 OAuth Scopes 생성
+4. ✅ M2M App Client 생성
+5. ✅ AgentCore Gateway 생성 (CLI 시도, 실패 시 수동 안내)
+6. ✅ Lambda Target 추가 (CLI 시도, 실패 시 수동 안내)
+7. ✅ Gateway 권한 설정
+
+스크립트 실행 후 `agentcore-setup-output.txt` 파일에 모든 설정 정보가 저장됩니다.
+
+> **참고**: AWS CLI의 `bedrock-agentcore` 명령어가 작동하지 않으면 스크립트가 콘솔 사용 방법을 안내합니다.
+
+#### 수동 설정
+
+스크립트를 사용하지 않고 수동으로 설정하려면 [AgentCore MCP 설정 가이드](AGENTCORE_MCP_SETUP.md)의 "수동 설정 (단계별)" 섹션을 참고하세요.
+
+**설정 시 필요한 정보:**
+- **MCP Lambda ARN**: 1단계 배포 출력의 McpServerHandler 함수 ARN
+- **MCP Endpoint**: 1단계 배포 출력의 McpServerEndpoint 값
+
+### 3단계: 환경 변수 업데이트
+
+1단계 CDK 배포와 2단계 AgentCore Gateway 설정이 완료되면, 자동화 스크립트로 모든 환경 변수를 한 번에 업데이트합니다.
+
+#### 자동 업데이트 (권장)
+
+```bash
+cd packages/infrastructure
+./scripts/update-env.sh
+```
+
+스크립트는 다음을 자동으로 수행합니다:
+- ✅ CDK 배포 출력 정보 가져오기 (API Endpoint, Bucket, Table 등)
+- ✅ AgentCore Gateway 설정 정보 가져오기 (`agentcore-setup-output.txt`)
+- ✅ 프론트엔드 `.env` 파일 업데이트
+- ✅ 백엔드 `.env` 파일 업데이트
+- ✅ MCP 서버 `.env` 파일 업데이트
+- ✅ 기존 파일 백업 (`.env.backup`)
+
+#### 수동 업데이트
+
+스크립트를 사용하지 않고 수동으로 업데이트하려면:
+
+**프론트엔드 (`packages/frontend/.env`):**
+```bash
+# API Gateway (1단계 CDK 배포 출력)
+VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod
+VITE_AWS_REGION=us-east-1
+
+# Cognito (2단계 agentcore-setup-output.txt 참고)
+VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
+VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+**백엔드 (`packages/backend/.env`):**
+```bash
+# AWS 설정 (1단계 CDK 배포 출력)
+AWS_REGION=us-east-1
+AWS_ACCOUNT_ID=YOUR_ACCOUNT_ID
+QUICKSIGHT_ACCOUNT_ID=YOUR_ACCOUNT_ID
+BUCKET_NAME=architecture-review-files-YOUR_ACCOUNT_ID-us-east-1
+
+# QuickSuite 정보 (5단계 QuickSuite 설정 후 업데이트)
+QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:us-east-1:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID
+QUICKSIGHT_USER_NAME=YOUR_QUICKSIGHT_USER
+QUICKSIGHT_EMBED_URL=https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/YOUR_ACCOUNT_ID/chatagents/YOUR_AGENT_ID?directory_alias=YOUR_ALIAS
+```
+
+**MCP 서버 (`packages/mcp-server/.env`):**
+```bash
+# 1단계 CDK 배포 출력 정보
+AWS_REGION=us-east-1
+AWS_ACCOUNT_ID=YOUR_ACCOUNT_ID
+TABLE_NAME=architecture-review-documents
+BUCKET_NAME=architecture-review-files-YOUR_ACCOUNT_ID-us-east-1
+```
+
+> **참고**: 백엔드의 QuickSuite 관련 정보는 5단계 QuickSuite 설정 후 수동으로 추가해야 합니다.
 
 ### 4단계: Cognito 사용자 생성
 
+AgentCore Gateway 설정으로 생성된 Cognito User Pool에 로그인할 사용자를 추가합니다.
+
+#### 자동 생성 (권장)
+
 ```bash
-# User Pool ID를 환경 변수로 설정
-export USER_POOL_ID=YOUR_USER_POOL_ID
+cd packages/infrastructure
+./scripts/create-cognito-user.sh
+```
+
+스크립트는 다음을 수행합니다:
+- ✅ 사용자 이름 입력 받기
+- ✅ 이메일 주소 입력 받기 (이메일 형식 검증)
+- ✅ 비밀번호 입력 받기 (보안 입력, 복잡도 검증)
+- ✅ Cognito 사용자 생성
+- ✅ 비밀번호 영구 설정
+
+> **참고**: 프론트엔드 로그인 시 입력한 이메일과 비밀번호를 사용합니다.
+
+#### 수동 생성
+
+스크립트를 사용하지 않고 수동으로 생성하려면:
+
+```bash
+# User Pool ID는 agentcore-setup-output.txt 파일에서 확인
+export USER_POOL_ID=us-east-1_XXXXXXXXX
 
 # 사용자 생성
 aws cognito-idp admin-create-user \
   --user-pool-id $USER_POOL_ID \
   --username admin \
-  --user-attributes Name=email,Value=your-email@example.com \
-  --temporary-password "TempPassword123!" \
+  --user-attributes Name=email,Value=your-email@example.com Name=email_verified,Value=true \
+  --message-action SUPPRESS \
   --region us-east-1
 
 # 비밀번호 영구 설정
@@ -77,20 +178,15 @@ aws cognito-idp admin-set-user-password \
 
 ### 5단계: QuickSuite 설정
 
+> **중요**: QuickSuite Enterprise Edition 구독이 필요합니다.
+
 #### QuickSuite 구독 활성화
 
 1. AWS 콘솔에서 QuickSuite 서비스로 이동
 2. QuickSuite 구독이 없다면 구독 시작
-3. Enterprise Edition 선택 (Chat Agent 기능 필요)
+3. **Enterprise Edition** 선택 (Chat Agent 기능 필수)
 
-#### Chat Agent 생성
-
-1. QuickSuite 콘솔에서 "Agents" 메뉴로 이동
-2. "Create agent" 클릭
-3. Agent 이름 입력 (예: "Architecture Review Agent")
-4. Agent 생성 완료 후 Agent ARN 복사
-
-#### QuickSuite 사용자 생성
+#### QuickSuite 사용자 생성(필요한 경우)
 
 ```bash
 # QuickSuite 사용자 생성 (IAM 사용자 기반)
@@ -103,130 +199,58 @@ aws quicksight register-user \
   --region us-east-1
 ```
 
-### 6단계: AgentCore Gateway 설정
-
-```bash
-cd packages/infrastructure
-
-# Gateway 설정 스크립트 실행
-./scripts/setup-agentcore.sh
-```
-
-스크립트가 다음 작업을 수행합니다:
-1. AgentCore Gateway 생성
-2. Cognito OAuth 클라이언트 생성
-3. Lambda를 MCP Target으로 등록
-4. MCP 도구 등록
-
-### 7단계: 환경 변수 업데이트
-
-배포 결과를 바탕으로 환경 변수 파일을 업데이트합니다.
-
-#### 프론트엔드 (.env)
-
-```bash
-cd packages/frontend
-```
-
-`.env` 파일 수정:
-```bash
-VITE_API_BASE_URL=https://YOUR_API_ID.execute-api.us-east-1.amazonaws.com/prod
-VITE_USER_POOL_ID=us-east-1_XXXXXXXXX
-VITE_USER_POOL_WEB_CLIENT_ID=XXXXXXXXXXXXXXXXXXXXXXXXXX
-VITE_COGNITO_DOMAIN=your-domain.auth.us-east-1.amazoncognito.com
-```
-
-#### 백엔드 (.env)
-
-```bash
-cd packages/backend
-```
-
-`.env` 파일 수정:
-```bash
-AWS_ACCOUNT_ID=YOUR_ACCOUNT_ID
-QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:us-east-1:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID
-QUICKSIGHT_USER_NAME=YOUR_QUICKSIGHT_USER
-BUCKET_NAME=YOUR_BUCKET_NAME
-```
-
-#### MCP 서버 (.env)
-
-```bash
-cd packages/mcp-server
-```
-
-`.env` 파일 수정:
-```bash
-AWS_ACCOUNT_ID=YOUR_ACCOUNT_ID
-TABLE_NAME=YOUR_TABLE_NAME
-BUCKET_NAME=YOUR_BUCKET_NAME
-```
-
-### 8단계: QuickSuite에 MCP 연결
+### 6단계: QuickSuite에 MCP 연결
 
 1. QuickSuite 콘솔 접속
-2. "Integrations" → "Actions" → "Model Context Protocol" 클릭
-3. 다음 정보 입력:
+2. "Integrations" → "Actions" → "Model Context Protocol" → (+) 클릭
+3. 다음 정보 입력 (`agentcore-setup-output.txt` 파일 참고):
    - **Name**: Architecture Review MCP
-   - **URL**: AgentCore Gateway URL
-   - **Auth Type**: Service authentication (2LO)
-   - **Client ID**: Cognito OAuth Client ID
-   - **Token URL**: Cognito Token Endpoint
+   - **Description**: `This is to store docs, query documents, and save review results of docs to S3 and DynamoDB.`
+   - **URL**: GATEWAY_URL (예: `https://architecture-review-gateway-xxxxxx.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp`)
+   - **Authentication method**: Service authentication
+   - **Authentication type**: Service-to-service OAuth
+   - **Client ID**: CLIENT_ID의 값
+   - **Client secret**: CLIENT_SECRET의 값
+   - **Token URL**: TOKEN_URL의 값
 4. "Connect" 클릭
 5. 5개의 MCP 도구가 표시되는지 확인
+   - architecture-review-tools___get_document
+   - architecture-review-tools___get_review
+   - architecture-review-tools___list_documents
+   - architecture-review-tools___save_review_to_s3
+   - architecture-review-tools___update_review
+6. "Done" 클릭
 
-### 9단계: QuickSuite Space 등록
+### 7단계: QuickSuite Space 등록
 
-#### 9.1 S3 접근 권한 등록
+#### 7.1 S3 접근 권한 등록
 
 QuickSuite가 S3 버킷에 접근할 수 있도록 권한을 설정합니다:
+1. QuickSuite 콘솔 접속
+2. 오른쪽 상단의 "Manage account" → "AWS resources" 클릭
+3. "Select S3 buckets" 클릭 → 1단계 배포 출력의 FilesBucketName 값 선택
+4. "Finish" 버튼 클릭 → "Save" 선택
 
-```bash
-# QuickSuite 서비스 역할에 S3 읽기 권한 추가
-aws iam attach-role-policy \
-  --role-name YOUR_QUICKSUITE_SERVICE_ROLE \
-  --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess \
-  --region us-east-1
-```
+#### 7.2 S3 Knowledge Base 생성
 
-또는 특정 버킷에만 권한 부여:
-
-```bash
-# 인라인 정책 생성
-aws iam put-role-policy \
-  --role-name YOUR_QUICKSUITE_SERVICE_ROLE \
-  --policy-name QuickSuiteS3Access \
-  --policy-document '{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": [
-          "s3:GetObject",
-          "s3:ListBucket"
-        ],
-        "Resource": [
-          "arn:aws:s3:::YOUR_BUCKET_NAME",
-          "arn:aws:s3:::YOUR_BUCKET_NAME/*"
-        ]
-      }
-    ]
-  }'
-```
-
-#### 9.2 S3 Knowledge Base 생성
-
-1. QuickSuite 콘솔에서 "Knowledge bases" 메뉴로 이동
-2. "Create knowledge base" 클릭
+1. QuickSuite 콘솔 접속
+2. "Integrations" → "Knowledge bases" 메뉴로 이동
+2. "Amazon S3"에서 (+) 버튼  클릭
 3. 다음 정보 입력:
    - **Name**: Architecture Review Documents
-   - **Description**: 아키텍처 검토 문서 저장소
-   - **Data source type**: Amazon S3
-   - **S3 URI**: `s3://YOUR_BUCKET_NAME/documents/`
-4. "Create" 클릭
+   - **AWS account**: 현재 계정 유지
+   - **S3 bucket URL**: 1단계 배포 출력의 FilesBucketName 값 입력(예시: s3://architecture-review-files-123456789012-us-east-1)
+   - **Metadata files folder location**: 빈칸 유지
+4. "Create and continue" 클릭
+5. Knowledge base details에 정보 입력
+   - **Name**: Architecture Review Documents
+   - **Description**: 아키텍처 문서 저장소
+   - **Content**: Add all content
+6. "Create" 버튼 클릭
 
-#### 9.3 Space 생성 및 Knowledge Base 연결
+> **중요**: Knowledge base의 문서를 Indexing하는데, 시간이 걸립니다. 상태가 "Available"로 변경될 때까지 기다리세요.
+
+#### 7.3 Space 생성 및 Knowledge Base 연결
 
 1. QuickSuite 콘솔에서 "Spaces" 메뉴로 이동
 2. "Create space" 클릭
@@ -234,19 +258,163 @@ aws iam put-role-policy \
    - **Space name**: Architecture Review Space
    - **Description**: 아키텍처 검토를 위한 작업 공간
 4. "Knowledge bases" 섹션에서:
-   - "Add knowledge base" 클릭
+   - "Add knowledge bases" 클릭
    - 앞서 생성한 "Architecture Review Documents" 선택
-5. "Create space" 클릭
+5. "Add" 클릭
+6. 기업의 자체 거버넌스 정책 문서가 있는 경우:
+   - **File uploads** 섹션으로 이동
+   - **Upload files** 클릭
+   - 기업 거버넌스 파일 선택하여 Space에 파일 추가
 
-#### 9.4 Chat Agent에 Space 연결
+#### 7.4 Chat Agent 생성
 
-1. QuickSuite 콘솔에서 생성한 Chat Agent로 이동
-2. "Settings" → "Spaces" 클릭
-3. "Add space" 클릭
-4. 생성한 "Architecture Review Space" 선택
-5. "Save" 클릭
+1. QuickSuite 콘솔에서 **Chat agents** 메뉴로 이동
+2. **Create chat agent** 클릭
+3. **Skip** 클릭
+4. 다음 정보 입력:
+   - **Name**: Architecture Review Agent
+   - **Description**: 아키텍처 리뷰 에이전트
+   - **Agent identity**: 당신은 AWS Well-Architected Framework의 6개 영역(운영 우수성, 보안, 안정성, 성능 효율성, 비용 최적화, 지속가능성)을 기반으로 아키텍처를 검토하는 전문 에이전트입니다.
+   - **Persona instructions**: 
+    ```
+    ## 역할
+    - 제출된 아키텍처 문서를 AWS Well-Architected 원칙에 따라 체계적으로 분석
+    - https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html의 각 하위 영역 문서 참조
+    - https://aws.amazon.com/ko/architecture/well-architected/의 모범사례 참조
+    - 기업 거버넌스 정책 문서를 참조하여 준수 여부 검토
+    - 개선 권고사항 및 우선순위 제시
 
-### 10단계: 프론트엔드 실행
+    ## 검토 프로세스
+    1. 아키텍처 개요 파악
+    2. 각 영역별 상세 분석
+    3. 거버넌스 정책 준수성 검토
+    4. 위험도 평가 및 개선안 도출
+
+    ## 출력 형식
+    ### 📋 아키텍처 요약
+    - 시스템 개요
+    - 주요 구성요소
+    - 아키텍처 다이어그램/구성도에 대한 요약 설명글
+
+    ### 🔍 Well-Architected 영역별 분석
+    각 영역마다:
+    - ✅ 준수 항목
+    - ⚠️ 개선 필요 항목  
+    - 🚨 위험 항목
+    - 권고사항
+
+    ### 🏛️ 거버넌스 준수성
+    - 정책 준수 현황
+    - 위반 사항 및 영향도
+    - 필수 조치사항
+
+    ### 📊 종합 평가
+    - 전체 점수 (A-F)
+    - 비용 관점 주요 고려사항/우려 사항
+
+    ### 추가 확인 필요 사항
+    - 제시된 아키텍처 문서에서 모호한 부분에 대한 질문 리스트를 제공
+
+    거버넌스 정책이 제공되지 않은 경우, 일반적인 엔터프라이즈 정책을 가정하여 검토합니다.
+    ```
+   - **Link spaces** 클릭하여, 생성한 **Architecture Review Space** 선택하고, **Link** 버튼 클릭
+   - **Link actions** 클릭하여, 생성한 **Architecture Review MCP** 선택하고, **Link** 버튼 클릭
+   - **Welcome message** 입력: 안녕하세요! 아키텍처 리뷰 에이전트입니다. Well-Architected Framework 기반의 아키텍처 분석을 도와드리겠습니다.
+   - **Suggested prompts** 입력: 
+    - 리뷰할 문서 목록 보여줘
+    - 최근 업로드된 문서에 대해 리뷰해줘
+  
+6. **Launch chat agent** 버튼 클릭
+7. Chat agent 생성 완료 후 **Agent ID 복사**
+
+> **참고**: Agent ID는 Agent를 선택했을 브라우저 URL에 표시됩니다. 예를 들어, URL이 https://us-east-1.quicksight.aws.amazon.com/sn/account/123456789012/agents/234934de-88b1-4b09-9229-16336cc55704/ 일 때, Agent ID는 234934de-88b1-4b09-9229-16336cc55704 입니다.
+
+#### 7.5 Chat agent 임베딩 URL 복사
+
+1. QuickSuite 콘솔에서 **Chat agents** 메뉴로 이동
+2. **action**의 **점 세개** 클릭하여 **Embed** 선택
+3. **Share via embed** 탭에서 `src=` 뒤의 값 복사 (예: https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/YOUR_ACCOUNT_ID/chatagents/234934de-88b1-4b09-9229-16336cc55704?directory_alias=YOUR_QUICKSUITE_ACCOUNT_NAME)
+
+
+#### 7.6 백엔드 환경 변수에 QuickSuite 정보 추가
+
+위에서 복사해둔 값으로 아래 변수들을 대체하세요.
+
+`packages/backend/.env` 파일을 편집:
+```bash
+QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:us-east-1:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID
+QUICKSIGHT_USER_NAME=YOUR_QUICKSIGHT_USER
+QUICKSIGHT_EMBED_URL=https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/YOUR_ACCOUNT_ID/chatagents/YOUR_AGENT_ID?directory_alias=YOUR_QUICKSUITE_ACCOUNT_NAME
+```
+
+아래는 `.env`의 예시입니다:
+```bash
+# AWS Configuration
+AWS_REGION=us-east-1
+AWS_ACCOUNT_ID=123456789012
+
+# QuickSight Configuration
+QUICKSIGHT_ACCOUNT_ID=123456789012
+QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:us-east-1:123456789012:agent/234934de-88b1-4b09-9229-16336cc55704
+QUICKSIGHT_NAMESPACE=default
+QUICKSIGHT_USER_NAME=WSParticipantRole/Participant
+
+# QuickSight Embed URL (optional - for direct sharing)
+QUICKSIGHT_EMBED_URL=https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/123456789012/chatagents/234934de-88b1-4b09-9229-16336cc55704?directory_alias=123456789012
+
+# S3 Configuration
+BUCKET_NAME=architecture-review-files-123456789012-us-east-1
+```
+
+#### 7.7 Lambda 환경 변수 업데이트
+
+백엔드 .env 파일을 업데이트한 후, Lambda 함수의 환경 변수도 업데이트해야 합니다.
+
+**자동 업데이트 (권장):**
+
+```bash
+cd packages/infrastructure
+./scripts/update-lambda-env.sh
+```
+
+스크립트는 다음을 수행합니다:
+- ✅ 백엔드 .env 파일에서 QuickSuite 설정 로드
+- ✅ Lambda 환경 변수 자동 업데이트
+- ✅ 업데이트 결과 확인
+
+**수동 업데이트:**
+
+```bash
+# QuickSight Embed Handler Lambda 함수 이름 확인
+QUICKSIGHT_LAMBDA=$(aws lambda list-functions \
+  --query "Functions[?contains(FunctionName, 'QuickSightEmbedHandler')].FunctionName" \
+  --output text \
+  --region us-east-1)
+
+echo "Lambda Function: $QUICKSIGHT_LAMBDA"
+
+# Lambda 환경 변수 업데이트
+aws lambda update-function-configuration \
+  --function-name "$QUICKSIGHT_LAMBDA" \
+  --environment "Variables={
+    QUICKSIGHT_ACCOUNT_ID=YOUR_ACCOUNT_ID,
+    QUICKSIGHT_AGENT_ARN=arn:aws:quicksight:us-east-1:YOUR_ACCOUNT_ID:agent/YOUR_AGENT_ID,
+    QUICKSIGHT_NAMESPACE=default,
+    QUICKSIGHT_USER_NAME=YOUR_QUICKSIGHT_USER
+  }" \
+  --region us-east-1
+```
+
+> **참고**: Lambda 환경 변수 업데이트 후 함수가 재시작되는 데 몇 초가 걸립니다.
+
+또는 CDK 스택을 재배포하여 환경 변수를 업데이트할 수 있습니다:
+
+```bash
+cd packages/infrastructure
+npx cdk deploy --all --require-approval never
+```
+
+### 8단계: 프론트엔드 실행
 
 ```bash
 cd packages/frontend
@@ -303,19 +471,57 @@ npx cdk deploy --all
 
 ## 🗑️ 리소스 삭제
 
-모든 AWS 리소스를 삭제하려면:
+### AgentCore Gateway 리소스 삭제
+
+AgentCore Gateway 관련 리소스만 삭제하려면:
 
 ```bash
 cd packages/infrastructure
+./scripts/cleanup-agentcore.sh
+```
+
+스크립트는 다음 리소스를 삭제합니다:
+- ✅ Gateway Target (Lambda Target)
+- ✅ AgentCore Gateway
+- ✅ Gateway IAM Role
+- ✅ Cognito App Client
+- ✅ Cognito Resource Server
+- ✅ Cognito Domain
+- ✅ Cognito User Pool
+- ✅ 설정 출력 파일
+
+> **참고**: 삭제 전 확인 프롬프트가 표시됩니다. `yes`를 입력하여 진행하세요.
+
+### 전체 인프라 삭제
+
+모든 AWS 리소스를 삭제하려면:
+
+```bash
+# 1. AgentCore Gateway 리소스 삭제
+cd packages/infrastructure
+./scripts/cleanup-agentcore.sh
+
+# 2. CDK 스택 삭제
 npx cdk destroy --all
 ```
 
-**주의**: 이 명령은 다음을 삭제합니다:
-- Lambda 함수
+**주의**: CDK destroy 명령은 다음을 삭제합니다:
+- Lambda 함수 (10개)
 - API Gateway
 - DynamoDB 테이블 (데이터 포함)
 - S3 버킷 (파일 포함)
-- Cognito User Pool
+
+> **중요**: S3 버킷에 파일이 있으면 삭제가 실패할 수 있습니다. 먼저 버킷을 비워야 합니다.
+
+### S3 버킷 비우기
+
+```bash
+# S3 버킷 내용 삭제
+aws s3 rm s3://YOUR_BUCKET_NAME --recursive --region us-east-1
+
+# 그 다음 CDK destroy 실행
+npx cdk destroy --all
+```
 
 ## 🐛 배포 문제 해결
 

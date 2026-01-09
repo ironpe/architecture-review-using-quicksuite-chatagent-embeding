@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { IconButton, Tooltip, SvgIcon } from '@mui/material';
 
 // QuickSight 스타일 채팅 아이콘 (실제 QuickSight 콘솔과 동일)

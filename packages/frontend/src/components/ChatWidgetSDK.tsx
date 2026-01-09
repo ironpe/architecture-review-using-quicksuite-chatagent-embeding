@@ -10,7 +10,6 @@ import {
   SvgIcon,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import { embedDashboard } from 'amazon-quicksight-embedding-sdk';
 
 // QuickSight 스타일 채팅 아이콘
 function QuickSightChatIcon(props: any) {
@@ -50,7 +49,17 @@ function ChatWidgetSDK({ isOpen, onClose }: ChatWidgetSDKProps) {
       const response = await fetch('http://localhost:3001/quicksight/embed-url');
       const data = await response.json();
 
-      // QuickSight Embedding SDK 사용
+      // QuickSight Embedding - using iframe directly
+      // Note: embedDashboard is not available in current SDK version
+      const iframe = document.createElement('iframe');
+      iframe.src = data.embedUrl;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = 'none';
+      if (containerRef.current) {
+        containerRef.current.appendChild(iframe);
+      }
+      /*
       const embeddingContext = await embedDashboard({
         url: data.embedUrl,
         container: containerRef.current,
@@ -68,11 +77,10 @@ function ChatWidgetSDK({ isOpen, onClose }: ChatWidgetSDKProps) {
         console.error('QuickSight embedding error:', event);
         setError('채팅 에이전트 로드에 실패했습니다.');
       });
-
-      embeddingContext.on('load', () => {
-        console.log('QuickSight chat loaded successfully');
-        setLoading(false);
-      });
+      */
+      
+      // Iframe loaded successfully
+      setLoading(false);
 
     } catch (err) {
       console.error('Error embedding QuickSight:', err);

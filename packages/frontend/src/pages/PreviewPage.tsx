@@ -9,7 +9,7 @@ import {
   Alert,
   Chip,
 } from '@mui/material';
-import { ArrowBack, Download, Description, Image, PictureAsPdf } from '@mui/icons-material';
+import { ArrowBack, Description, Image, PictureAsPdf } from '@mui/icons-material';
 import { getDocument } from '../services/api';
 import { GetDocumentResponse } from '../types';
 import { formatDate } from '../utils/date';

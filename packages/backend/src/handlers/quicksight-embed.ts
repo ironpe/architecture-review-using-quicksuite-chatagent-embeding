@@ -66,6 +66,7 @@ export async function handler(
 
     const embedResponse: QuickSightEmbedResponse = {
       embedUrl: response.EmbedUrl,
+      agentId: agentId,
       status: response.Status || 200,
     };
 

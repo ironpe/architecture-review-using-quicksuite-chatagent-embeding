@@ -334,10 +334,10 @@ export class ArchitectureReviewStack extends cdk.Stack {
       description: 'IAM role ARN for Lambda functions',
     });
 
-    // Output MCP Server endpoint
+    // Output MCP Server endpoint (base URL for QuickSuite MCP Action registration)
     new cdk.CfnOutput(this, 'McpServerEndpoint', {
-      value: `${this.api.url}mcp/v1/tools/call`,
-      description: 'MCP Server endpoint for QuickSight Chat Agent',
+      value: `${this.api.url}mcp`,
+      description: 'MCP Server base endpoint for QuickSuite Chat Agent (QuickSuite will append /v1/tools/list and /v1/tools/call)',
     });
   }
 }

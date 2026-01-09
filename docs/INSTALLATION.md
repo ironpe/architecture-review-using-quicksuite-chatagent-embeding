@@ -42,25 +42,7 @@ npm install
 npm install --workspaces
 ```
 
-또는 각 패키지별로 설치:
-
-```bash
-# 프론트엔드
-cd packages/frontend
-npm install
-
-# 백엔드
-cd ../backend
-npm install
-
-# 인프라
-cd ../infrastructure
-npm install
-
-# MCP 서버
-cd ../mcp-server
-npm install
-```
+> **참고**: 위 명령어로 모든 패키지의 의존성이 자동으로 설치됩니다. 개별 패키지별로 설치할 필요는 없습니다.
 
 ### 3. AWS CLI 설정
 
@@ -78,11 +60,29 @@ aws configure
 
 ### 4. AWS CDK 부트스트랩
 
-CDK를 처음 사용하는 경우:
+CDK를 처음 사용하는 경우, 먼저 필요한 패키지들을 빌드한 후 부트스트랩을 진행합니다:
 
 ```bash
+# 백엔드 빌드
+cd packages/backend
+npm run build
+
+# MCP 서버 빌드
+cd ../mcp-server
+npm run build
+
+# 계정 ID 확인
+cd ../..
+aws sts get-caller-identity --query Account --output text
+
+# CDK 부트스트랩 (YOUR_ACCOUNT_ID와 YOUR_REGION을 실제 값으로 변경)
 cd packages/infrastructure
 npx cdk bootstrap aws://YOUR_ACCOUNT_ID/YOUR_REGION
+```
+
+예시:
+```bash
+npx cdk bootstrap aws://123456789012/us-east-1
 ```
 
 ### 5. 환경 변수 설정
@@ -95,10 +95,12 @@ cp .env.example .env
 ```
 
 `.env` 파일을 편집하여 다음 값을 설정:
-- `VITE_API_BASE_URL`: API Gateway URL (배포 후 설정)
-- `VITE_USER_POOL_ID`: Cognito User Pool ID (배포 후 설정)
-- `VITE_USER_POOL_WEB_CLIENT_ID`: Cognito Client ID (배포 후 설정)
-- `VITE_COGNITO_DOMAIN`: Cognito Domain (배포 후 설정)
+- `VITE_AWS_REGION`: AWS 리전 (예: us-east-1)
+
+**배포 후 업데이트 필요:**
+- `VITE_API_BASE_URL`: API Gateway URL
+- `VITE_USER_POOL_ID`: Cognito User Pool ID
+- `VITE_USER_POOL_WEB_CLIENT_ID`: Cognito Client ID
 
 #### 백엔드 환경 변수
 
@@ -108,10 +110,15 @@ cp .env.example .env
 ```
 
 `.env` 파일을 편집하여 다음 값을 설정:
+- `AWS_REGION`: AWS 리전 (예: us-east-1)
 - `AWS_ACCOUNT_ID`: 본인의 AWS 계정 ID
-- `QUICKSIGHT_AGENT_ARN`: QuickSight Agent ARN (배포 후 설정)
+- `QUICKSIGHT_ACCOUNT_ID`: AWS 계정 ID (AWS_ACCOUNT_ID와 동일)
+
+**배포 후 업데이트 필요:**
+- `QUICKSIGHT_AGENT_ARN`: QuickSight Agent ARN
 - `QUICKSIGHT_USER_NAME`: QuickSight 사용자 이름
-- `BUCKET_NAME`: S3 버킷 이름 (배포 후 설정)
+- `QUICKSIGHT_EMBED_URL`: QuickSight Embed URL
+- `BUCKET_NAME`: S3 버킷 이름(아키텍처 검토 문서를 업로드할 버킷명)
 
 #### MCP 서버 환경 변수
 
@@ -121,9 +128,14 @@ cp .env.example .env
 ```
 
 `.env` 파일을 편집하여 다음 값을 설정:
+- `AWS_REGION`: AWS 리전 (예: us-east-1)
 - `AWS_ACCOUNT_ID`: 본인의 AWS 계정 ID
-- `TABLE_NAME`: DynamoDB 테이블 이름 (배포 후 설정)
-- `BUCKET_NAME`: S3 버킷 이름 (배포 후 설정)
+
+**배포 후 업데이트 필요:**
+- `TABLE_NAME`: DynamoDB 테이블 이름
+- `BUCKET_NAME`: S3 버킷 이름(아키텍처 검토 결과를 저장할 버킷명)
+
+> **참고**: 배포 후 업데이트가 필요한 값들은 [배포 가이드](DEPLOYMENT.md)를 완료한 후 CDK 출력 결과를 참고하여 설정하세요.
 
 ## ✅ 설치 확인
 

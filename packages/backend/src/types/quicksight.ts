@@ -8,6 +8,7 @@ export interface QuickSightEmbedRequest {
 
 export interface QuickSightEmbedResponse {
   embedUrl: string;
+  agentId?: string;
   status: number;
 }
 

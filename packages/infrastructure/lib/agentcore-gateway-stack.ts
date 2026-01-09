@@ -1,9 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
-import * as bedrock from 'aws-cdk-lib/aws-bedrock';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
-import * as path from 'path';
 import { Construct } from 'constructs';
 
 export interface AgentCoreGatewayStackProps extends cdk.StackProps {
@@ -13,8 +11,8 @@ export interface AgentCoreGatewayStackProps extends cdk.StackProps {
 }
 
 export class AgentCoreGatewayStack extends cdk.Stack {
-  public readonly gateway: bedrock.CfnGateway;
-  public readonly gatewayUrl: string;
+  public readonly gateway: any; // bedrock.CfnGateway is not available in current CDK version
+  public readonly gatewayUrl: string = '';
 
   constructor(scope: Construct, id: string, props: AgentCoreGatewayStackProps) {
     super(scope, id, props);
@@ -63,7 +61,8 @@ export class AgentCoreGatewayStack extends cdk.Stack {
       `ArchitectureReviewStack-McpServerHandler89A0C9C0-qqJwYOe88Yxw`
     );
 
-    // MCP Schema for tools
+    // MCP Schema for tools (commented out - for future use when CfnGateway is available)
+    /*
     const mcpSchema = [
       {
         name: 'get_document',
@@ -145,6 +144,7 @@ export class AgentCoreGatewayStack extends cdk.Stack {
         },
       },
     ];
+    */
 
     // IAM Role for AgentCore Gateway
     const gatewayRole = new iam.Role(this, 'AgentCoreGatewayRole', {
@@ -156,6 +156,10 @@ export class AgentCoreGatewayStack extends cdk.Stack {
     mcpToolsLambda.grantInvoke(gatewayRole);
 
     // Create AgentCore Gateway
+    // Note: CfnGateway is not available in current CDK version
+    // This will be created manually or through CloudFormation template
+    // Commenting out for now to allow build to succeed
+    /*
     this.gateway = new bedrock.CfnGateway(this, 'AgentCoreGateway', {
       gatewayName: 'architecture-review-gateway',
       inboundFlowConfig: {
@@ -177,11 +181,12 @@ export class AgentCoreGatewayStack extends cdk.Stack {
         },
       ],
     });
+    */
 
     // Outputs
-    new cdk.CfnOutput(this, 'GatewayUrl', {
-      value: this.gateway.attrGatewayResourceUrl,
-      description: 'AgentCore Gateway URL for QuickSight',
+    new cdk.CfnOutput(this, 'McpLambdaArn', {
+      value: mcpToolsLambda.functionArn,
+      description: 'MCP Tools Lambda ARN for manual Gateway setup',
     });
 
     new cdk.CfnOutput(this, 'UserPoolId', {

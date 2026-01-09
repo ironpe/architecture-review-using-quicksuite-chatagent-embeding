@@ -30,7 +30,7 @@ import {
 import { Search as SearchIcon, Visibility, Delete as DeleteIcon, Description as ReviewIcon } from '@mui/icons-material';
 import { listDocuments, searchDocuments, deleteDocument, getReview } from '../services/api';
 import { DocumentMetadata } from '../types';
-import { formatDate, formatDateShort } from '../utils/date';
+import { formatDateShort } from '../utils/date';
 import { formatFileSize } from '../utils/validation';
 
 function DocumentListPage() {
@@ -517,13 +517,6 @@ function DocumentListPage() {
               {reviewContent ? (
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm, remarkBreaks]}
-                  components={{
-                    h1: ({node, ...props}) => <Typography variant="h4" component="h1" {...props} />,
-                    h2: ({node, ...props}) => <Typography variant="h5" component="h2" {...props} />,
-                    h3: ({node, ...props}) => <Typography variant="h6" component="h3" {...props} />,
-                    p: ({node, ...props}) => <Typography variant="body1" paragraph {...props} />,
-                    li: ({node, ...props}) => <Typography variant="body2" component="li" {...props} />,
-                  }}
                 >
                   {reviewContent}
                 </ReactMarkdown>

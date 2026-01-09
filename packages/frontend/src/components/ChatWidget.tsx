@@ -91,8 +91,8 @@ function ChatWidget({ isOpen, onClose, onWidthChange }: ChatWidgetProps) {
       setEmbedUrl(data.embedUrl);
       console.log('QuickSight embed URL loaded');
       
-      // Embed using SDK
-      await embedQuickChat(data.embedUrl);
+      // Embed using SDK with Agent ID from backend
+      await embedQuickChat(data.embedUrl, data.agentId);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load chat');
       console.error('Error loading QuickSight embed URL:', err);
@@ -101,11 +101,12 @@ function ChatWidget({ isOpen, onClose, onWidthChange }: ChatWidgetProps) {
     }
   };
 
-  const embedQuickChat = async (url: string) => {
+  const embedQuickChat = async (url: string, agentId?: string) => {
     if (!containerRef.current) return;
 
     try {
-      const agentId = 'ef4cec92-6280-4c25-8e9a-c49814b73283';
+      // Use Agent ID from backend, fallback to hardcoded value
+      const finalAgentId = agentId || 'ef4cec92-6280-4c25-8e9a-c49814b73283';
       
       const embeddingContext = await createEmbeddingContext();
 
@@ -122,7 +123,7 @@ function ChatWidget({ isOpen, onClose, onWidthChange }: ChatWidgetProps) {
       const contentOptions = {
         locale: 'ko-KR',
         agentOptions: {
-          fixedAgentId: agentId,  // Agent 고정
+          fixedAgentId: finalAgentId,  // Agent ID from backend
         },
         onMessage: async (messageEvent: any) => {
           console.log('QuickChat message:', messageEvent.eventName);
@@ -133,7 +134,7 @@ function ChatWidget({ isOpen, onClose, onWidthChange }: ChatWidgetProps) {
       };
 
       await embeddingContext.embedQuickChat(frameOptions, contentOptions);
-      console.log('QuickChat embedded successfully with agent:', agentId);
+      console.log('QuickChat embedded successfully with agent:', finalAgentId);
     } catch (err) {
       console.error('Error embedding QuickChat:', err);
       setError('채팅 임베딩에 실패했습니다');

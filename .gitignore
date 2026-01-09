@@ -18,6 +18,10 @@ cdk.out/
 .env.*.local
 *.pem
 *.key
+agentcore-setup-output.txt
+cdk-outputs.json
+target-config.json
+credential-providers.json
 
 # AWS
 .aws/
@@ -51,5 +55,3 @@ coverage/
 *.tmp
 .cache/
 
-# Internal documentation
-GITHUB_PREP_SUMMARY.md
