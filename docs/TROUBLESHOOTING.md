@@ -98,6 +98,42 @@ aws cloudformation describe-stack-events \
   --stack-name YOUR_STACK_NAME \
   --region us-east-1 \
   --max-items 20
+```
+
+### AgentCore Gateway 스크립트 실패
+
+**증상**: `setup-agentcore.sh` 실행 시 오류
+
+**해결**:
+```bash
+# AWS CLI 버전 확인 (bedrock-agentcore-control 명령어 필요)
+aws --version  # 2.32.0 이상 권장
+
+# 권한 확인
+aws sts get-caller-identity
+
+# 리소스 정리 후 재시도
+./scripts/cleanup-agentcore.sh
+./scripts/setup-agentcore.sh
+```
+
+### 환경 변수 업데이트 실패
+
+**증상**: `update-env.sh` 실행 시 오류
+
+**해결**:
+```bash
+# CDK 스택이 배포되었는지 확인
+aws cloudformation describe-stacks \
+  --stack-name ArchitectureReviewStack \
+  --region us-east-1
+
+# agentcore-setup-output.txt 파일 존재 확인
+ls -la packages/infrastructure/agentcore-setup-output.txt
+
+# 수동으로 환경 변수 업데이트
+# 배포 가이드 3단계 "수동 업데이트" 참고
+```
 
 # 스택 삭제 후 재배포
 aws cloudformation delete-stack \

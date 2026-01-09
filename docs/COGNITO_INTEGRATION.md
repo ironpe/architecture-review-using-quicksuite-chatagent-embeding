@@ -57,27 +57,31 @@ VITE_USER_POOL_WEB_CLIENT_ID=YOUR_WEB_CLIENT_ID
 
 ## 🔑 Cognito 사용자 관리
 
-### 현재 사용자
-- **Username**: `your-username`
-- **Email**: `your-email@example.com`
-- **Password**: `YourSecurePassword123!`
+### 사용자 생성 (자동화)
+
+```bash
+cd packages/infrastructure
+./scripts/create-cognito-user.sh
+```
+
+스크립트가 대화형으로 이메일과 비밀번호를 입력받아 사용자를 생성합니다.
 
 ### 비밀번호 변경
 ```bash
 aws cognito-idp admin-set-user-password \
   --user-pool-id YOUR_USER_POOL_ID \
-  --username your-username \
+  --username YOUR_EMAIL \
   --password "NewPassword123!" \
   --permanent \
   --region us-east-1
 ```
 
-### 새 사용자 생성
+### 새 사용자 생성 (수동)
 ```bash
 # 사용자 생성
 aws cognito-idp admin-create-user \
   --user-pool-id YOUR_USER_POOL_ID \
-  --username newuser \
+  --username user@example.com \
   --user-attributes Name=email,Value=user@example.com Name=email_verified,Value=true \
   --message-action SUPPRESS \
   --region us-east-1
@@ -85,11 +89,13 @@ aws cognito-idp admin-create-user \
 # 비밀번호 설정
 aws cognito-idp admin-set-user-password \
   --user-pool-id YOUR_USER_POOL_ID \
-  --username newuser \
+  --username user@example.com \
   --password "UserPassword123!" \
   --permanent \
   --region us-east-1
 ```
+
+> **참고**: 이 User Pool은 이메일을 username으로 사용합니다.
 
 ## 💻 기술 구현
 
