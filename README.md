@@ -65,12 +65,18 @@ graph TB
 
 #### 📖 1단계: 기본 설치 및 배포
 1. **[설치 가이드](docs/INSTALLATION.md)** - 사전 요구사항 및 환경 설정
-2. **[배포 가이드](docs/DEPLOYMENT.md)** - AWS 리소스 배포 (Lambda, API Gateway, DynamoDB, S3, Cognito)
+2. **[배포 가이드](docs/DEPLOYMENT.md)** - AWS 리소스 배포
+   - CDK 인프라 배포 (Lambda, API Gateway, DynamoDB, S3)
+   - AgentCore Gateway 설정 (Cognito 포함)
+   - 환경 변수 자동 업데이트
+   - Cognito 사용자 생성
 3. **[빠른 시작 가이드](docs/QUICKSTART.md)** - 자동화 스크립트로 5분 안에 시작
 
-#### 🤖 2단계: QuickSuite 설정
+#### 🤖 2단계: QuickSuite 통합 (선택 사항)
 4. **[QuickSuite 설정 가이드](docs/QUICKSIGHT_SETUP.md)** - Chat Agent, Space, Knowledge Base 생성
-5. **[AgentCore MCP 설정 가이드](docs/AGENTCORE_MCP_SETUP.md)** - MCP 도구 연동
+5. **[AgentCore MCP 설정 가이드](docs/AGENTCORE_MCP_SETUP.md)** - MCP 도구 연동 상세 가이드
+
+> **참고**: 1단계만 완료해도 문서 업로드/관리 기능은 사용 가능합니다. QuickSuite Chat Agent 기능이 필요한 경우에만 2단계를 진행하세요.
 
 #### ✅ 3단계: 아키텍처 문서 리뷰 수행
 6. 프론트엔드에서 아키텍처 문서 업로드
